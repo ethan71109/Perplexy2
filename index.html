@@ -1,0 +1,2576 @@
+<!DOCTYPE html>
+<html lang="en" data-theme-active="default">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perplexy</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Lora:wght@400;600&family=Roboto+Mono:wght@400;700&family=Orbitron:wght@500;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- THEME DEFINITIONS --- */
+        :root { /* Default (Perplexy Dark) */
+            --bg-primary: #1c1c1e; --bg-secondary: #111; --bg-tertiary: #2c2c2e; --bg-interactive: #3b82f6;
+            --text-primary: #e5e7eb; --text-secondary: #9ca3af; --text-accent: #60a5fa; --text-danger: #ef4444;
+            --border-color: #374151; --glow-color: rgba(59, 130, 246, 0.4);
+        }
+        [data-theme-active="light"] {
+            --bg-primary: #f9fafb; --bg-secondary: #ffffff; --bg-tertiary: #e5e7eb; --bg-interactive: #3b82f6;
+            --text-primary: #111827; --text-secondary: #4b5563; --text-accent: #2563eb; --text-danger: #dc2626;
+            --border-color: #d1d5db; --glow-color: rgba(59, 130, 246, 0.3);
+        }
+        [data-theme-active="cyberpunk"] {
+            --bg-primary: #0a0a0a; --bg-secondary: #1a1a1a; --bg-tertiary: #2a2a2a; --bg-interactive: #00f0ff;
+            --text-primary: #00f0ff; --text-secondary: #88ddff; --text-accent: #f0f; --text-danger: #ff4757;
+            --border-color: #00f0ff; --glow-color: rgba(0, 240, 255, 0.5);
+        }
+        [data-theme-active="classic"] {
+            --bg-primary: #fdf6e3; --bg-secondary: #fbf1c7; --bg-tertiary: #ebdbb2; --bg-interactive: #d65d0e;
+            --text-primary: #3c3836; --text-secondary: #504945; --text-accent: #b57614; --text-danger: #cc241d;
+            --border-color: #d5c4a1; --glow-color: rgba(214, 93, 14, 0.2);
+        }
+        [data-theme-active="sharingan"] {
+            --bg-primary: #000000; --bg-secondary: #1a1a1a; --bg-tertiary: #2a2a2a; --bg-interactive: #e60023;
+            --text-primary: #ffffff; --text-secondary: #a0a0a0; --text-accent: #007bff; --text-danger: #e60023;
+            --border-color: #e60023; --glow-color: rgba(230, 0, 35, 0.6);
+        }
+
+        /* --- Dynamic Styling --- */
+        body { font-family: var(--font-primary, 'Inter', sans-serif); background-color: var(--bg-primary); }
+        h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading, 'Orbitron', sans-serif); }
+        .rounded-lg, .rounded-full, .rounded-md { border-radius: var(--border-radius, 0.5rem); }
+        .shadow-lg { box-shadow: var(--shadow, 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05)); }
+
+        #login-screen { background: radial-gradient(ellipse at center, var(--bg-tertiary) 0%, var(--bg-secondary) 100%);}
+        #login-challenge-box { 
+            font-family: 'Orbitron', sans-serif; 
+            box-shadow: 0 0 15px var(--glow-color), 0 0 30px var(--glow-color);
+            animation: pulse-glow 4s infinite alternate;
+            background-color: rgba(0,0,0,0.5);
+            border-color: var(--border-color);
+        }
+        @keyframes pulse-glow {
+            from { box-shadow: 0 0 15px var(--glow-color), 0 0 30px var(--glow-color); }
+            to { box-shadow: 0 0 25px var(--glow-color), 0 0 50px var(--glow-color); }
+        }
+
+        /* General UI with variables */
+        .bg-main-app { background-color: var(--bg-primary); }
+        .bg-sidebar { background-color: var(--bg-secondary); }
+        .text-main-title { color: var(--text-primary); }
+        .sidebar-btn { background-color: var(--bg-tertiary); color: var(--text-primary); }
+        .sidebar-btn:hover { background-color: var(--bg-interactive); color: var(--text-primary); }
+        .sidebar-btn.active { background-color: var(--bg-interactive); color: var(--text-primary); }
+        .text-heading { color: var(--text-secondary); }
+        .library-item:hover { background-color: var(--bg-tertiary); }
+        .action-btn { color: var(--text-secondary); }
+        .action-btn.danger { color: var(--text-danger); }
+        .main-content-bg { background-color: var(--bg-primary); }
+        
+        .welcome-title { color: var(--text-primary); }
+        .animated-gradient-text {
+            background: linear-gradient(90deg, var(--text-accent), #9333ea, #ec4899, var(--text-accent));
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: gradient-animation 5s ease infinite;
+            font-family: 'Orbitron', sans-serif;
+        }
+        @keyframes gradient-animation {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        .search-input { background-color: var(--bg-tertiary); border-color: var(--border-color); color: var(--text-primary); }
+        .search-input:focus { ring-color: var(--bg-interactive); }
+        .icon-btn { color: var(--text-secondary); }
+        .icon-btn:hover { color: var(--text-primary); }
+        .focus-btn, .personality-btn { background-color: var(--bg-tertiary); color: var(--text-secondary); }
+        .focus-btn:hover, .personality-btn:hover { background-color: var(--bg-secondary); }
+        .focus-btn.active, .personality-btn.active { background-color: var(--bg-interactive); color: var(--text-primary); }
+        .results-title { color: var(--text-primary); }
+        .results-thinking { color: var(--text-secondary); }
+        .results-container-border { border-color: var(--border-color); }
+        .user-message { background-color: var(--bg-interactive); color: var(--text-primary); }
+        .model-message { background-color: var(--bg-tertiary); }
+        .modal-bg { background-color: var(--bg-secondary); }
+        
+        /* Custom scrollbar */
+        #results-container::-webkit-scrollbar,
+        #library-list::-webkit-scrollbar,
+        #personalize-entries-list::-webkit-scrollbar,
+        #chess-library-list::-webkit-scrollbar,
+        #dream-journal-list::-webkit-scrollbar,
+        #game-details-content::-webkit-scrollbar,
+        #game-analysis-container::-webkit-scrollbar,
+        #logs-container::-webkit-scrollbar,
+        #pgn-textarea::-webkit-scrollbar { width: 6px; }
+        #results-container::-webkit-scrollbar-track,
+        #library-list::-webkit-scrollbar-track,
+        #personalize-entries-list::-webkit-scrollbar-track,
+        #chess-library-list::-webkit-scrollbar-track,
+        #dream-journal-list::-webkit-scrollbar-track,
+        #game-details-content::-webkit-scrollbar-track,
+        #game-analysis-container::-webkit-scrollbar-track,
+        #logs-container::-webkit-scrollbar-track,
+        #pgn-textarea::-webkit-scrollbar-track { background: var(--bg-secondary); }
+        #results-container::-webkit-scrollbar-thumb,
+        #library-list::-webkit-scrollbar-thumb,
+        #personalize-entries-list::-webkit-scrollbar-thumb,
+        #chess-library-list::-webkit-scrollbar-thumb,
+        #dream-journal-list::-webkit-scrollbar-thumb,
+        #game-details-content::-webkit-scrollbar-thumb,
+        #game-analysis-container::-webkit-scrollbar-thumb,
+        #logs-container::-webkit-scrollbar-thumb,
+        #pgn-textarea::-webkit-scrollbar-thumb { background: var(--bg-tertiary); border-radius: 3px; }
+        #results-container::-webkit-scrollbar-thumb:hover,
+        #library-list::-webkit-scrollbar-thumb:hover,
+        #personalize-entries-list::-webkit-scrollbar-thumb:hover,
+        #chess-library-list::-webkit-scrollbar-thumb:hover,
+        #dream-journal-list::-webkit-scrollbar-thumb:hover,
+        #game-details-content::-webkit-scrollbar-thumb:hover,
+        #game-analysis-container::-webkit-scrollbar-thumb:hover,
+        #logs-container::-webkit-scrollbar-thumb:hover,
+        #pgn-textarea::-webkit-scrollbar-thumb:hover { background: var(--bg-interactive); }
+    
+        /* --- Chess Game Styles --- */
+        #chess-board-wrapper { 
+            position: relative;
+        }
+        #chess-board-container { 
+            position: relative;
+            margin: 1.5rem; /* Space for labels */
+        }
+        .chess-label-container {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+        }
+        #rank-labels {
+            position: absolute;
+            left: -1.5rem;
+            top: 0;
+            bottom: 0;
+            display: flex;
+            flex-direction: column;
+        }
+        #file-labels {
+            position: absolute;
+            bottom: -1.5rem;
+            left: 0;
+            right: 0;
+            display: flex;
+        }
+        .chess-label {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+        }
+        
+        #chess-board {
+            display: grid;
+            grid-template-columns: repeat(8, 1fr);
+            border: 2px solid var(--border-color);
+            box-shadow: 0 0 20px var(--glow-color);
+            width: 100%;
+            height: 100%;
+        }
+        #chess-pieces {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            pointer-events: none;
+        }
+        .chess-piece {
+            position: absolute;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center; /* Ensures unicode characters are centered */
+            pointer-events: all;
+            cursor: grab;
+            transition: transform 0.1s ease, top 0.2s ease, left 0.2s ease;
+        }
+        .chess-piece.dragging {
+            cursor: grabbing;
+            z-index: 10;
+            filter: drop-shadow(0 0 10px rgba(0,0,0,0.5));
+            transition: none;
+        }
+        .chess-square {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+        .chess-square.light { background-color: #f0d9b5; }
+        .chess-square.dark { background-color: #b58863; }
+
+        .chess-square.selected {
+            background-color: var(--bg-interactive) !important;
+            opacity: 0.8;
+        }
+
+        .valid-move::after {
+            content: '';
+            display: block;
+            width: 30%;
+            height: 30%;
+            border-radius: 50%;
+            background-color: var(--bg-interactive);
+            opacity: 0.5;
+        }
+
+        .last-move {
+            background-color: rgba(255, 255, 0, 0.4) !important;
+        }
+
+        @keyframes flash-danger {
+            0%, 100% { background-color: var(--bg-danger); }
+            50% { /* Original color is restored by removing the class */ }
+        }
+
+        .in-check {
+            animation: flash-danger 1s infinite;
+        }
+        
+        /* Toggle Switch Styles */
+        .toggle-switch-container {
+            display: flex;
+            background-color: var(--bg-tertiary);
+            border-radius: var(--border-radius);
+            padding: 4px;
+            position: relative;
+        }
+        .toggle-switch-option {
+            padding: 6px 16px;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            cursor: pointer;
+            z-index: 2;
+            transition: color 0.3s ease;
+        }
+        .toggle-switch-option.active {
+            color: var(--text-primary);
+        }
+        .toggle-switch-bg {
+            position: absolute;
+            top: 4px;
+            bottom: 4px;
+            width: calc(50% - 4px);
+            background-color: var(--bg-interactive);
+            border-radius: var(--border-radius);
+            transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            z-index: 1;
+        }
+        
+        /* Analysis & Suggestion & Summary Styles */
+        .summary-container h4, #game-analysis-container h4, #suggestion-modal h4, .breakdown-container h4, #dream-interpretation-container h4 {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--text-accent);
+            margin-top: 1rem;
+            margin-bottom: 0.5rem;
+            padding-bottom: 0.25rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .summary-container p, #game-analysis-container p, #suggestion-modal p, .breakdown-container p, #dream-interpretation-container p, .goal-breakdown-container ol li {
+             color: var(--text-secondary);
+             line-height: 1.6;
+        }
+        .summary-container, .goal-breakdown-container, #dream-interpretation-container {
+            background-color: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            padding: 1rem;
+            margin-top: 1rem;
+            border-radius: var(--border-radius);
+        }
+        .goal-breakdown-container ol {
+            list-style-type: decimal;
+            list-style-position: inside;
+            padding-left: 0.5rem;
+        }
+         .goal-breakdown-container li {
+             margin-bottom: 0.5rem;
+         }
+        
+         /* Logs View */
+        #logs-container {
+            font-family: 'Roboto Mono', monospace;
+            white-space: pre-wrap;
+            word-break: break-all;
+            background-color: var(--bg-secondary);
+            color: var(--text-primary);
+            padding: 1rem;
+            height: 100%;
+            overflow-y: auto;
+        }
+        
+        /* Promotion Modal */
+        #promotion-modal .promotion-piece {
+            font-size: 3rem;
+            cursor: pointer;
+            padding: 0.5rem;
+            transition: transform 0.2s;
+        }
+        #promotion-modal .promotion-piece:hover {
+            transform: scale(1.1);
+        }
+    </style>
+</head>
+<body class="text-main-title">
+
+    <div id="login-screen" class="fixed inset-0 flex flex-col items-center justify-center z-10 p-4">
+        <div id="login-challenge-box" class="w-full max-w-2xl flex flex-col h-auto bg-black/50 backdrop-blur-sm rounded-xl border p-6">
+            <div id="login-chat-container" class="flex-grow overflow-y-auto space-y-4 max-h-96">
+            </div>
+            <div class="flex-shrink-0 mt-4">
+                <div class="relative">
+                    <input id="login-input" type="text" placeholder="Your response..." class="search-input w-full text-lg rounded-full p-4 pl-6 pr-16">
+                    <button id="login-send-btn" class="absolute inset-y-0 right-0 pr-4 flex items-center">
+                        <svg class="w-6 h-6 icon-btn" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5l7 7-7 7M5 12h14"></path></svg>
+                    </button>
+                </div>
+            </div>
+            <div id="login-actions-container" class="text-center mt-4">
+                <button id="login-clear-cache-btn" class="hidden text-sm text-danger hover:underline">
+                    Forget this device and clear all data?
+                </button>
+            </div>
+        </div>
+    </div>
+
+
+    <div id="main-app" class="hidden h-screen w-full">
+        <div class="flex h-full w-full">
+            <aside class="w-64 bg-sidebar p-4 flex flex-col">
+                <h1 class="text-3xl font-bold text-main-title mb-8">Perplexy</h1>
+                <nav class="flex flex-col space-y-2 flex-grow">
+                    <a href="#" id="home-btn" class="sidebar-btn active flex items-center space-x-3 p-2 rounded-lg">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" /></svg>
+                        <span>Home</span>
+                    </a>
+                    <a href="#" id="dream-journal-btn" class="sidebar-btn flex items-center space-x-3 p-2 rounded-lg">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 2a.75.75 0 01.75.75v.5a.75.75 0 01-1.5 0v-.5A.75.75 0 0110 2zM8.5 4.5A.75.75 0 007.75 5v.5a.75.75 0 001.5 0V5A.75.75 0 008.5 4.5zM11.5 4.5a.75.75 0 00-.75.75v.5a.75.75 0 001.5 0V5a.75.75 0 00-.75-.75zM5.5 9.5A.75.75 0 004.75 10v.5a.75.75 0 001.5 0V10a.75.75 0 00-.75-.75zM14.5 9.5a.75.75 0 00-.75.75v.5a.75.75 0 001.5 0V10a.75.75 0 00-.75-.75zM10 12a2 2 0 11-4 0 2 2 0 014 0z" clip-rule="evenodd" /><path d="M3.25 6.223c-.7-.208-1.4-.04-1.83.493a.75.75 0 001.18 1.18c.07-.09.18-.17.3-.23v.001l.006.003c.12.06.26.1.41.12H3a2 2 0 00-2 2v5a2 2 0 002 2h14a2 2 0 002-2v-5a2 2 0 00-2-2h-.316a3.25 3.25 0 00.41-.12l.006-.003v-.001c.12-.06.23-.14.3-.23a.75.75 0 10-1.18-1.18c-.43.533-1.13.7-1.83-.493A5.25 5.25 0 0010 4a5.25 5.25 0 00-6.75 2.223z" /></svg>
+                        <span>Dream Journal</span>
+                    </a>
+                    <a href="#" id="chess-btn" class="sidebar-btn flex items-center space-x-3 p-2 rounded-lg">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M10 2a1 1 0 00-1 1v1a1 1 0 002 0V3a1 1 0 00-1-1zM4 4a1 1 0 00-1 1v1a1 1 0 002 0V5a1 1 0 00-1-1zm12 0a1 1 0 00-1 1v1a1 1 0 002 0V5a1 1 0 00-1-1zM4 10a1 1 0 00-1 1v1a1 1 0 002 0v-1a1 1 0 00-1-1zm12 0a1 1 0 00-1 1v1a1 1 0 002 0v-1a1 1 0 00-1-1zM10 16a1 1 0 00-1 1v1a1 1 0 002 0v-1a1 1 0 00-1-1z" /></svg>
+                        <span>Chess</span>
+                    </a>
+                    <a href="#" id="chess-library-btn" class="sidebar-btn flex items-center space-x-3 p-2 rounded-lg">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z" /><path fill-rule="evenodd" d="M4 5a2 2 0 012-2h8a2 2 0 012 2v10a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h.01a1 1 0 100-2H10zm3 0a1 1 0 000 2h.01a1 1 0 100-2H13z" clip-rule="evenodd" /></svg>
+                        <span>Game Library</span>
+                    </a>
+                    <div>
+                        <h2 class="text-lg font-semibold text-heading mt-4 mb-2 px-2">Reflection Library</h2>
+                        <div id="library-list" class="max-h-96 overflow-y-auto pr-2">
+                        </div>
+                    </div>
+                </nav>
+                 <div class="flex-shrink-0 space-y-2">
+                    <a href="#" id="logs-btn" class="action-btn flex items-center space-x-3 p-2 rounded-lg hover:bg-tertiary">
+                       <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M2 5a2 2 0 012-2h12a2 2 0 012 2v10a2 2 0 01-2 2H4a2 2 0 01-2-2V5zm3.293 1.293a1 1 0 011.414 0l3 3a1 1 0 010 1.414l-3 3a1 1 0 01-1.414-1.414L6.586 10 5.293 8.707a1 1 0 010-1.414zM11 7a1 1 0 100 2h3a1 1 0 100-2h-3z" clip-rule="evenodd" /></svg>
+                       <span>Logs</span>
+                    </a>
+                    <a href="#" id="themes-btn" class="action-btn flex items-center space-x-3 p-2 rounded-lg hover:bg-tertiary">
+                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M4 2a2 2 0 00-2 2v12a2 2 0 002 2h12a2 2 0 002-2V4a2 2 0 00-2-2H4zm12 2H4v12h12V4zM6 8a.5.5 0 000 1h8a.5.5 0 000-1H6zM6 11a.5.5 0 000 1h8a.5.5 0 000-1H6z" clip-rule="evenodd" /></svg>
+                        <span>Themes</span>
+                    </a>
+                    <a href="#" id="personalize-btn" class="action-btn flex items-center space-x-3 p-2 rounded-lg hover:bg-tertiary">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-6-3a2 2 0 11-4 0 2 2 0 014 0zm-2 4a5 5 0 00-4.546 2.916A5.986 5.986 0 0010 16a5.986 5.986 0 004.546-2.084A5 5 0 0010 11z" clip-rule="evenodd" /></svg>
+                        <span>Personalize</span>
+                    </a>
+                    <a href="#" id="clear-cache-btn" class="action-btn danger flex items-center space-x-3 p-2 rounded-lg hover:bg-tertiary">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" /></svg>
+                        <span>Clear Cache</span>
+                    </a>
+                </div>
+            </aside>
+
+            <main id="main-content-area" class="flex-1 flex flex-col items-center p-4 md:p-8 main-content-bg overflow-y-auto">
+                <div id="welcome-view" class="w-full h-full max-w-6xl">
+                    <!-- Header -->
+                    <div class="flex justify-between items-center mb-6">
+                        <div>
+                             <h2 class="text-4xl md:text-5xl font-bold welcome-title animated-gradient-text">Welcome, Ethan</h2>
+                            <p id="welcome-date" class="text-heading"></p>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                        <!-- Main Content (Left) -->
+                        <div class="lg:col-span-2 space-y-6">
+                            <!-- Main Input Card -->
+                            <div class="bg-sidebar p-6 rounded-lg shadow-lg">
+                                 <h3 class="text-xl font-semibold text-main-title mb-4">Start a New Reflection</h3>
+                                 <div class="relative mb-4">
+                                    <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                        <svg class="w-5 h-5 text-heading" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                                    </div>
+                                    <input id="search-input" type="text" placeholder="What's on your mind?" class="search-input w-full text-lg rounded-full p-4 pl-12 pr-24">
+                                    <div class="absolute inset-y-0 right-0 pr-4 flex items-center space-x-2">
+                                        <input type="file" id="image-upload" class="hidden" accept="image/*">
+                                        <button id="image-upload-btn" class="icon-btn" title="Upload Image">
+                                           <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l-1-1m6-3l-2-2" /></svg>
+                                        </button>
+                                        <button id="send-btn">
+                                            <svg class="w-6 h-6 icon-btn" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5l7 7-7 7M5 12h14"></path></svg>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div id="image-preview-container" class="hidden mb-4 justify-center">
+                                    <img id="image-preview" src="" alt="Image preview" class="max-h-24 rounded-lg" />
+                                    <button id="remove-image-btn" class="ml-2 text-danger text-xs">Remove</button>
+                                </div>
+                                 <div class="mt-6 flex items-center justify-start space-x-4">
+                                    <span class="text-heading">Focus:</span>
+                                    <button class="focus-btn active px-4 py-1.5 rounded-full" data-focus="general">General</button>
+                                    <button class="focus-btn px-4 py-1.5 rounded-full" data-focus="reflection">Reflection</button>
+                                    <button class="focus-btn px-4 py-1.5 rounded-full" data-focus="feelings">Feelings</button>
+                                    <button class="focus-btn px-4 py-1.5 rounded-full" data-focus="strengths">Strengths</button>
+                                    <button class="focus-btn px-4 py-1.5 rounded-full" data-focus="goals">Goals</button>
+                                </div>
+                            </div>
+
+                            <!-- Recent Reflections -->
+                            <div class="bg-sidebar p-6 rounded-lg shadow-lg">
+                                <h3 class="text-xl font-semibold text-main-title mb-4">Recent Reflections</h3>
+                                <div id="recent-reflections-list" class="space-y-3">
+                                    </div>
+                            </div>
+                        </div>
+
+                        <!-- Sidebar (Right) -->
+                        <div class="space-y-6">
+                            <!-- Quick Actions -->
+                            <div class="bg-sidebar p-6 rounded-lg shadow-lg">
+                                <h3 class="text-xl font-semibold text-main-title mb-4">Quick Actions</h3>
+                                <div class="space-y-3">
+                                    <a href="#" id="home-play-chess-btn" class="flex items-center p-3 bg-tertiary rounded-lg hover:bg-interactive transition-colors">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3 text-accent" viewBox="0 0 20 20" fill="currentColor"><path d="M10 2a1 1 0 00-1 1v1a1 1 0 002 0V3a1 1 0 00-1-1zM4 4a1 1 0 00-1 1v1a1 1 0 002 0V5a1 1 0 00-1-1zm12 0a1 1 0 00-1 1v1a1 1 0 002 0V5a1 1 0 00-1-1zM4 10a1 1 0 00-1 1v1a1 1 0 002 0v-1a1 1 0 00-1-1zm12 0a1 1 0 00-1 1v1a1 1 0 002 0v-1a1 1 0 00-1-1zM10 16a1 1 0 00-1 1v1a1 1 0 002 0v-1a1 1 0 00-1-1z" /></svg>
+                                        <span>Play Chess</span>
+                                    </a>
+                                    <a href="#" id="home-view-library-btn" class="flex items-center p-3 bg-tertiary rounded-lg hover:bg-interactive transition-colors">
+                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3 text-accent" viewBox="0 0 20 20" fill="currentColor"><path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z" /><path fill-rule="evenodd" d="M4 5a2 2 0 012-2h8a2 2 0 012 2v10a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h.01a1 1 0 100-2H10zm3 0a1 1 0 000 2h.01a1 1 0 100-2H13z" clip-rule="evenodd" /></svg>
+                                        <span>Review Games</span>
+                                    </a>
+                                </div>
+                            </div>
+                            
+                            <!-- Daily Insight -->
+                            <div class="bg-sidebar p-6 rounded-lg shadow-lg">
+                                <h3 class="text-xl font-semibold text-main-title mb-4">✨ Daily Insight</h3>
+                                <div id="daily-insight-content" class="text-heading mb-4 min-h-[60px]">
+                                    <p>Click the button to get a thought-provoking question for your day.</p>
+                                </div>
+                                <button id="get-daily-insight-btn" class="w-full px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-500">Get Insight</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="results-view" class="hidden w-full h-full max-w-4xl flex flex-col">
+                    <h2 id="query-title" class="text-2xl font-semibold mb-4 results-title"></h2>
+                    <div id="results-container" class="flex-grow overflow-y-auto pr-4 space-y-6"></div>
+                    <div id="results-actions" class="flex-shrink-0 mt-4 space-y-4">
+                        <button id="summarize-btn" class="hidden w-full px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-500">Summarize Reflection ✨</button>
+                        <button id="breakdown-goal-btn" class="hidden w-full px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-500">Break Down Goal ✨</button>
+                         <div id="follow-up-container" class="hidden pt-4 mt-4 border-t border-gray-700">
+                            <h3 class="font-semibold text-main-title mb-2">✨ Let's explore...</h3>
+                            <div id="follow-up-questions" class="flex flex-wrap gap-2"></div>
+                        </div>
+                         <input id="follow-up-input" type="text" placeholder="Share more or ask a follow-up..." class="search-input w-full text-lg rounded-full p-4 pl-6">
+                    </div>
+                </div>
+                <div id="chess-view" class="hidden w-full h-full flex flex-col items-center justify-center">
+                    <div class="w-full max-w-md flex justify-between items-center mb-4">
+                         <div id="game-mode-toggle" class="toggle-switch-container">
+                            <div id="game-mode-bg" class="toggle-switch-bg"></div>
+                            <span id="game-mode-human-btn" class="toggle-switch-option active">vs Human</span>
+                            <span id="game-mode-ai-btn" class="toggle-switch-option">vs Aegis</span>
+                        </div>
+                        <button id="ai-vs-ai-btn" class="px-5 py-2 bg-purple-600 text-primary rounded-lg">Aegis vs Aegis ✨</button>
+                    </div>
+
+                    <div id="chess-status" class="text-2xl font-bold my-4">White's Turn</div>
+                    <div id="chess-board-wrapper">
+                        <div id="chess-board-container">
+                            <div id="chess-board"></div>
+                            <div id="chess-pieces"></div>
+                            <div id="chess-labels-container" class="chess-label-container">
+                                <div id="rank-labels"></div>
+                                <div id="file-labels"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="w-full max-w-md flex justify-between items-center mt-4">
+                        <div id="move-style-toggle" class="toggle-switch-container">
+                            <div id="move-style-bg" class="toggle-switch-bg" style="transform: translateX(100%);"></div>
+                            <span id="move-style-click-btn" class="toggle-switch-option">Click</span>
+                            <span id="move-style-drag-btn" class="toggle-switch-option active">Drag</span>
+                        </div>
+                        <div class="flex space-x-2">
+                           <button id="undo-move-btn" class="p-2 bg-yellow-600 text-white rounded-lg hover:bg-yellow-500 disabled:opacity-50 disabled:cursor-not-allowed" title="Undo Move">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l-4-4m0 0l4-4m-4 4h12" /></svg>
+                           </button>
+                           <button id="resign-btn" class="px-4 py-2 bg-red-700 text-white rounded-lg hover:bg-red-600">Resign</button>
+                           <button id="suggest-move-btn" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-500">Suggest ✨</button>
+                           <button id="generate-pgn-btn" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-500">PGN</button>
+                           <button id="new-game-btn" class="px-5 py-2 bg-interactive text-primary rounded-lg">New Game</button>
+                        </div>
+                    </div>
+
+                </div>
+                <div id="chess-library-view" class="hidden w-full h-full max-w-4xl flex flex-col">
+                    <h2 class="text-2xl font-semibold mb-4 results-title">Chess Game Library</h2>
+                    <div class="flex-grow flex space-x-4 overflow-hidden">
+                        <div id="chess-library-list" class="w-1/3 bg-sidebar p-2 rounded-lg overflow-y-auto">
+                        </div>
+                        <div id="chess-game-details" class="w-2/3 bg-tertiary p-4 rounded-lg flex flex-col overflow-hidden">
+                            <div id="game-details-content" class="overflow-y-auto flex-grow">
+                                <p class="text-heading">Select a game to view its moves.</p>
+                            </div>
+                            <div class="mt-4 flex-shrink-0 space-x-2">
+                                <button id="analyze-game-btn" class="hidden w-auto px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-500">Analyze Game ✨</button>
+                            </div>
+                            <div id="game-analysis-container" class="mt-4 overflow-y-auto flex-grow">
+                                </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="logs-view" class="hidden w-full h-full max-w-6xl flex flex-col">
+                     <div class="flex justify-between items-center mb-4">
+                        <h2 class="text-2xl font-semibold results-title">Application Logs</h2>
+                        <button id="clear-logs-btn" class="px-4 py-2 bg-danger text-primary rounded-lg">Clear Logs</button>
+                     </div>
+                     <div id="logs-container" class="flex-grow bg-sidebar p-4 rounded-lg"></div>
+                </div>
+                <div id="dream-journal-view" class="hidden w-full h-full max-w-6xl flex flex-col">
+                    <div class="flex justify-between items-center mb-4">
+                        <h2 class="text-2xl font-semibold results-title">Dream Journal</h2>
+                        <button id="new-dream-btn" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-500">New Dream</button>
+                    </div>
+                    <div class="flex-grow flex space-x-4 overflow-hidden">
+                        <div id="dream-journal-list" class="w-1/3 bg-sidebar p-2 rounded-lg overflow-y-auto">
+                        </div>
+                        <div id="dream-details-view" class="w-2/3 bg-tertiary p-4 rounded-lg flex flex-col overflow-hidden space-y-4">
+                             <p class="text-heading text-center mt-8">Select a dream from the list or start a new one.</p>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+    
+    <div id="themes-modal" class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center hidden z-50">
+        <div class="modal-bg p-6 rounded-lg shadow-xl w-full max-w-4xl flex flex-col">
+            <h2 class="text-2xl font-bold text-main-title mb-4">Select a Theme</h2>
+            <div id="theme-grid" class="grid grid-cols-2 md:grid-cols-4 gap-4">
+            </div>
+             <div class="flex justify-end mt-6">
+                <button id="themes-done-btn" class="px-4 py-2 bg-interactive text-primary rounded-lg">Done</button>
+            </div>
+        </div>
+    </div>
+     <div id="promotion-modal" class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center hidden z-50">
+        <div class="modal-bg p-6 rounded-lg shadow-xl w-full max-w-sm flex flex-col space-y-4">
+            <h2 class="text-2xl font-bold text-main-title text-center">Promote Pawn</h2>
+            <div id="promotion-options" class="flex justify-around">
+                <span class="promotion-piece" data-piece="Q">♕</span>
+                <span class="promotion-piece" data-piece="R">♖</span>
+                <span class="promotion-piece" data-piece="B">♗</span>
+                <span class="promotion-piece" data-piece="N">♘</span>
+            </div>
+        </div>
+    </div>
+
+    <div id="password-modal" class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center hidden z-50">
+        <div class="modal-bg p-6 rounded-lg shadow-xl w-full max-w-sm flex flex-col space-y-4">
+            <h2 id="password-title" class="text-2xl font-bold text-main-title">Enter Password</h2>
+            <p id="password-error" class="text-danger text-sm hidden">Passwords do not match or are invalid.</p>
+            <input id="password-input" type="password" placeholder="Password" class="search-input w-full rounded-lg p-3">
+            <input id="password-confirm" type="password" placeholder="Confirm Password" class="search-input w-full rounded-lg p-3 hidden">
+            <div class="flex justify-end space-x-3">
+                <button id="password-cancel-btn" class="px-4 py-2 bg-tertiary rounded-lg hover:bg-secondary">Cancel</button>
+                <button id="password-submit-btn" class="px-4 py-2 bg-interactive text-primary rounded-lg">Submit</button>
+            </div>
+        </div>
+    </div>
+    <div id="personalize-modal" class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center hidden z-50">
+        <div class="modal-bg p-6 rounded-lg shadow-xl w-full max-w-2xl flex flex-col" style="height: 75vh;">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-2xl font-bold text-main-title">Personalize Perplexy</h2>
+            </div>
+            <p class="text-heading mb-4">Add facts, preferences, or anything else you want the AI to remember about you.</p>
+            <div id="personalize-entries-list" class="flex-grow overflow-y-auto bg-sidebar p-2 rounded-lg space-y-2 mb-4">
+            </div>
+            <div class="flex space-x-2 mb-4">
+                <input id="new-entry-input" type="text" placeholder="Enter a new fact..." class="search-input w-full rounded-full p-3">
+                <button id="add-entry-btn" class="px-4 py-2 bg-green-600 text-white rounded-full hover:bg-green-500">Add</button>
+            </div>
+            <div class="flex justify-end space-x-3">
+                 <button id="change-password-btn" class="px-4 py-2 bg-tertiary text-primary rounded-lg">Change Password</button>
+                <button id="personalize-done-btn" class="px-4 py-2 bg-interactive text-primary rounded-lg">Done</button>
+            </div>
+        </div>
+    </div>
+    <div id="confirm-modal" class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center hidden z-50">
+        <div class="modal-bg p-6 rounded-lg shadow-xl w-full max-w-sm flex flex-col space-y-4">
+            <h2 class="text-xl font-bold text-main-title">Are you sure?</h2>
+            <p id="confirm-modal-text" class="text-heading">This action cannot be undone.</p>
+            <div class="flex justify-end space-x-3">
+                <button id="confirm-cancel-btn" class="px-4 py-2 bg-tertiary rounded-lg hover:bg-secondary">Cancel</button>
+                <button id="confirm-ok-btn" class="px-4 py-2 bg-danger text-primary rounded-lg">Confirm</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="suggestion-modal" class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center hidden z-50">
+        <div class="modal-bg p-6 rounded-lg shadow-xl w-full max-w-md flex flex-col space-y-4">
+            <h2 class="text-2xl font-bold text-main-title">AI Suggestion ✨</h2>
+            <div id="suggestion-content">
+                <p>Thinking...</p>
+            </div>
+            <div class="flex justify-end">
+                <button id="suggestion-close-btn" class="px-4 py-2 bg-interactive text-primary rounded-lg">Got it</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="pgn-modal" class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center hidden z-50">
+        <div class="modal-bg p-6 rounded-lg shadow-xl w-full max-w-lg flex flex-col space-y-4">
+            <h2 class="text-2xl font-bold text-main-title">PGN</h2>
+            <textarea id="pgn-textarea" readonly class="search-input w-full rounded-lg p-3 flex-grow h-64 font-mono text-sm" style="resize: none;"></textarea>
+            <div class="flex justify-end space-x-2">
+                <button id="pgn-copy-btn" class="px-4 py-2 bg-green-600 text-white rounded-lg">Copy to Clipboard</button>
+                <button id="pgn-close-btn" class="px-4 py-2 bg-interactive text-primary rounded-lg">Close</button>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Firebase SDK -->
+    <script type="module">
+        // Import Firebase services
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, onAuthStateChanged, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, getDoc, setDoc, updateDoc, deleteDoc, onSnapshot, collection, query, writeBatch, getDocs, orderBy, serverTimestamp, addDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { enableIndexedDbPersistence } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const app = {
+                API_KEY: "AIzaSyCFGrVMpTWPA01cJWHYn2h-EvWegHCjGog",
+                conversationHistory: [],
+                currentConversationId: null,
+                activeFocus: 'general',
+                uploadedImageData: null,
+                passwordContext: { action: null, data: null },
+                loginState: { step: 1, attempts: 0, isVerified: false, impersonationDetected: false },
+                
+                // Firestore state
+                firebase: {
+                    db: null,
+                    auth: null,
+                    userId: null,
+                    isReady: false,
+                    listeners: [], // To detach listeners on sign-out
+                },
+
+                // Local state caches
+                localState: {
+                    reflections: [],
+                    chessGames: [],
+                    dreamJournal: [],
+                    personalization: [],
+                    settings: { theme: 'default' }
+                },
+
+                // Confirmation modal state
+                confirmContext: {
+                    action: null,
+                    data: null
+                },
+                
+                logger: {
+                    logs: [],
+                    log(message, level = 'INFO') {
+                        const newLog = { timestamp: new Date().toISOString(), message, level };
+                        this.logs.unshift(newLog);
+                        if(this.logs.length > 200) { 
+                            this.logs.pop();
+                        }
+                        const originalConsole = console[level.toLowerCase()] || console.log;
+                        originalConsole(`[PERPLEXY] ${message}`);
+                    },
+                    info(message) { this.log(message, 'INFO'); },
+                    warn(message) { this.log(message, 'WARN'); },
+                    error(message, errorObj) { 
+                        this.log(`${message} ${errorObj ? errorObj.toString() : ''}`, 'ERROR');
+                    },
+                    clear() { this.logs = []; }
+                },
+                chessState: {
+                    board: [],
+                    currentPlayer: 'white',
+                    selectedPiece: null,
+                    validMoves: [],
+                    gameMode: 'human',
+                    gameOver: false,
+                    moveHistory: [],
+                    gameResult: '*', // New property for PGN
+                    lastMove: null,
+                    enPassantTarget: '-',
+                    hasMoved: {},
+                    chessMoveStyle: 'drag',
+                    dragState: { isDragging: false, pieceElement: null, from: { row: null, col: null }, offsetX: 0, offsetY: 0, },
+                    promotionPending: null,
+                    aiMoveQueue: [],
+                    isAiThinking: false
+                },
+                chessStateHistory: [],
+                dom: {},
+                 themes: [
+                    { 
+                        id: 'default', name: 'Perplexy Dark', 
+                        colors: { '--bg-primary': '#1c1c1e', '--bg-secondary': '#111', '--bg-tertiary': '#2c2c2e', '--bg-interactive': '#3b82f6', '--text-primary': '#e5e7eb', '--text-secondary': '#9ca3af', '--text-accent': '#60a5fa', '--text-danger': '#ef4444', '--border-color': '#374151', '--glow-color': 'rgba(59, 130, 246, 0.4)'},
+                        styles: { '--font-primary': "'Inter', sans-serif", '--font-heading': "'Orbitron', sans-serif", '--border-radius': '0.5rem', '--shadow': '0 10px 15px -3px rgba(0,0,0,0.4), 0 4px 6px -2px rgba(0,0,0,0.2)'}
+                    },
+                    { 
+                        id: 'light', name: 'Serene Light', 
+                        colors: { '--bg-primary': '#f9fafb', '--bg-secondary': '#ffffff', '--bg-tertiary': '#e5e7eb', '--bg-interactive': '#3b82f6', '--text-primary': '#111827', '--text-secondary': '#4b5563', '--text-accent': '#2563eb', '--text-danger': '#dc2626', '--border-color': '#d1d5db', '--glow-color': 'rgba(59, 130, 246, 0.3)' },
+                        styles: { '--font-primary': "'Lora', serif", '--font-heading': "'Inter', sans-serif", '--border-radius': '0.75rem', '--shadow': '0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06)'}
+                    },
+                     { 
+                        id: 'cyberpunk', name: 'Cyberpunk', 
+                        colors: { '--bg-primary': '#0a0a0a', '--bg-secondary': '#1a1a1a', '--bg-tertiary': '#2a2a2a', '--bg-interactive': '#00f0ff', '--text-primary': '#00f0ff', '--text-secondary': '#88ddff', '--text-accent': '#f0f', '--text-danger': '#ff4757', '--border-color': '#00f0ff', '--glow-color': 'rgba(0, 240, 255, 0.5)' },
+                        styles: { '--font-primary': "'Roboto Mono', monospace", '--font-heading': "'Roboto Mono', monospace", '--border-radius': '0.1rem', '--shadow': '0 0 15px rgba(0, 240, 255, 0.3)'}
+                    },
+                    { 
+                        id: 'classic', name: 'Classic Read', 
+                        colors: { '--bg-primary': '#fdf6e3', '--bg-secondary': '#fbf1c7', '--bg-tertiary': '#ebdbb2', '--bg-interactive': '#d65d0e', '--text-primary': '#3c3836', '--text-secondary': '#504945', '--text-accent': '#b57614', '--text-danger': '#cc241d', '--border-color': '#d5c4a1', '--glow-color': 'rgba(214, 93, 14, 0.2)'},
+                        styles: { '--font-primary': "'Lora', serif", '--font-heading': "'Lora', serif", '--border-radius': '0.25rem', '--shadow': '0 1px 3px 0 rgba(0,0,0,0.1), 0 1px 2px 0 rgba(0,0,0,0.06)'}
+                    },
+                    { 
+                        id: 'sharingan', name: 'Sharingan', 
+                        colors: { '--bg-primary': '#000000', '--bg-secondary': '#1a1a1a', '--bg-tertiary': '#2a2a2a', '--bg-interactive': '#e60023', '--text-primary': '#ffffff', '--text-secondary': '#a0a0a0', '--text-accent': '#007bff', '--text-danger': '#e60023', '--border-color': '#e60023', '--glow-color': 'rgba(230, 0, 35, 0.6)' },
+                        styles: { '--font-primary': "'Roboto Mono', monospace", '--font-heading': "'Orbitron', sans-serif", '--border-radius': '0rem', '--shadow': '0 0 10px rgba(230, 0, 35, 0.5)'}
+                    }
+                ],
+                openingBook: {
+                    // White Openings
+                    "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1": ["e2e4", "d2d4"],
+                    // Ruy Lopez
+                    "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2": ["g1f3"],
+                    "r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3": ["f1b5"],
+                    // Queen's Gambit
+                    "rnbqkbnr/pppppppp/8/8/3P4/8/PPP1PPPP/RNBQKBNR b KQkq - 0 1": ["d7d5", "g8f6"],
+                    "rnbqkbnr/ppp1pppp/8/3p4/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 0 2": ["c2c4"],
+                    "rnbqkbnr/ppp1pppp/8/3p4/2P5/8/PP1PPPPP/RNBQKBNR b KQkq - 0 2": ["e7e6", "c7c6"],
+
+                    // Black Defenses
+                    // Caro-Kann
+                    "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1": ["c7c6"],
+                    "rnbqkbnr/pp1ppppp/2p5/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2": ["d2d4"],
+                    "rnbqkbnr/pp1ppppp/2p5/8/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2": ["d7d5"],
+                    // Nimzo-Indian
+                    "rnbqkb1r/pppppppp/5n2/8/2PP4/8/PP2PPPP/RNBQKBNR b KQkq - 0 2": ["e7e6"],
+                    "rnbqkb1r/pp1p1ppp/4pn2/8/2PP4/8/PP2PPPP/RNBQKBNR w KQkq - 0 3": ["b1c3"],
+                    "rnbqkb1r/pp1p1ppp/4pn2/8/2PP4/2N5/PP3PPP/R1BQKBNR b KQkq - 1 4": ["f8b4"],
+                },
+
+                init() {
+                    this.logger.info("Application Initializing...");
+                    this.cacheDom();
+                    this.boundMouseMove = this.onPieceMouseMove.bind(this);
+                    this.boundMouseUp = this.onPieceMouseUp.bind(this);
+                    this.setupEventListeners();
+                    this.loadTheme();
+                    this.initLoginFlow();
+                },
+
+                loadTheme() {
+                    const savedTheme = localStorage.getItem('perplexy_theme') || 'default';
+                    this.applyTheme(savedTheme, false); // Load theme for login screen, don't save to DB yet
+                },
+
+                initLoginFlow() {
+                    const existingPassword = localStorage.getItem('perplexy_unified_password');
+                    if (existingPassword) {
+                        this.loginState.step = 0; 
+                        this.addLoginChatMessage("Welcome back. Please enter your password to unlock.");
+                        this.dom.loginInput.type = 'password';
+                        this.dom.loginClearCacheBtn.classList.remove('hidden');
+                    } else {
+                        this.addLoginChatMessage("Please state the initial phrase to begin verification.");
+                    }
+                },
+
+                initMainApp() {
+                    this.logger.info("Main application starting...");
+                    this.dom.loginScreen.classList.add('hidden');
+                    this.dom.mainApp.classList.remove('hidden');
+                    this.dom.mainApp.classList.add('flex');
+
+                    this.initFirebase();
+                    this.initChess('human');
+                },
+
+                async initFirebase() {
+                    try {
+                        this.logger.info("Firebase initialization started.");
+                        
+                        const firebaseConfig = {
+                            apiKey: "AIzaSyAqRDlHaMl0RIZkmCqpV7RKfPR--wWBKWM",
+                            authDomain: "perplexy-19f6e.firebaseapp.com",
+                            projectId: "perplexy-19f6e",
+                            storageBucket: "perplexy-19f6e.appspot.com",
+                            messagingSenderId: "151775922713",
+                            appId: "1:151775922713:web:46d89a39f4c7515dcef888",
+                            measurementId: "G-6H6303WL3X"
+                        };
+                        
+                        const firebaseApp = initializeApp(firebaseConfig);
+                        this.firebase.auth = getAuth(firebaseApp);
+                        this.firebase.db = getFirestore(firebaseApp);
+
+                        await enableIndexedDbPersistence(this.firebase.db);
+                        this.logger.info("Firestore offline persistence enabled.");
+
+                        onAuthStateChanged(this.firebase.auth, async user => {
+                            if (user) {
+                                this.logger.info(`User authenticated with UID: ${user.uid}`);
+                                this.firebase.userId = user.uid;
+                                this.firebase.isReady = true;
+                                this.attachDataListeners();
+                            } else {
+                                this.logger.info("No user found, signing in anonymously...");
+                                await signInAnonymously(this.firebase.auth);
+                            }
+                        });
+                    } catch (error) {
+                        this.logger.error(`Firebase Init Failed:`, error);
+                    }
+                },
+                
+                detachAllListeners() {
+                    this.logger.info(`Detaching ${this.firebase.listeners.length} Firebase listeners.`);
+                    this.firebase.listeners.forEach(unsubscribe => unsubscribe());
+                    this.firebase.listeners = [];
+                },
+
+                attachDataListeners() {
+                    if (!this.firebase.isReady) return;
+                    this.detachAllListeners();
+
+                    const userId = this.firebase.userId;
+
+                    const collections = {
+                        settings: `users/${userId}/settings/main`,
+                        reflections: `users/${userId}/reflections`,
+                        chess: `users/${userId}/chess-games`,
+                        dreams: `users/${userId}/dreams`,
+                        personalization: `users/${userId}/personalization/main`
+                    };
+
+                    // Settings Listener
+                    const settingsListener = onSnapshot(doc(this.firebase.db, collections.settings), (docSnap) => {
+                        if (docSnap.exists()) {
+                            this.localState.settings = docSnap.data();
+                            this.applyTheme(this.localState.settings.theme || 'default', false);
+                        } else {
+                            this.applyTheme('default');
+                        }
+                    }, (error) => this.logger.error("Settings listener failed:", error));
+                    this.firebase.listeners.push(settingsListener);
+
+                    // Reflections Listener
+                    const reflectionsListener = onSnapshot(query(collection(this.firebase.db, collections.reflections)), (querySnapshot) => {
+                        this.localState.reflections = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })).sort((a,b) => b.timestamp - a.timestamp);
+                        this.renderReflectionLibrary();
+                        this.renderWelcomeView();
+                    }, (error) => this.logger.error("Reflections listener failed:", error));
+                    this.firebase.listeners.push(reflectionsListener);
+                    
+                    // Chess Games Listener
+                     const chessListener = onSnapshot(query(collection(this.firebase.db, collections.chess)), (querySnapshot) => {
+                        this.localState.chessGames = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })).sort((a,b) => b.timestamp - a.timestamp);
+                        if(!this.dom.chessLibraryView.classList.contains('hidden')) {
+                           this.renderChessLibrary();
+                        }
+                    }, (error) => this.logger.error("Chess listener failed:", error));
+                    this.firebase.listeners.push(chessListener);
+                    
+                    // Dream Journal Listener
+                    const dreamsListener = onSnapshot(query(collection(this.firebase.db, collections.dreams)), (querySnapshot) => {
+                        this.localState.dreamJournal = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })).sort((a,b) => b.timestamp - a.timestamp);
+                        if(!this.dom.dreamJournalView.classList.contains('hidden')) {
+                           this.renderDreamJournal();
+                        }
+                    }, (error) => this.logger.error("Dream listener failed:", error));
+                    this.firebase.listeners.push(dreamsListener);
+
+                    // Personalization Listener
+                     const personalizationListener = onSnapshot(doc(this.firebase.db, collections.personalization), (docSnap) => {
+                        if (docSnap.exists()) {
+                            this.localState.personalization = docSnap.data().entries || [];
+                        } else {
+                            this.localState.personalization = [];
+                        }
+                         if (!this.dom.personalizeModal.classList.contains('hidden')) {
+                             this.renderPersonalizeEntries();
+                         }
+                    }, (error) => this.logger.error("Personalization listener failed:", error));
+                    this.firebase.listeners.push(personalizationListener);
+                },
+
+
+                cacheDom() {
+                    const ids = [
+                        'login-screen', 'main-app', 'login-input', 'login-send-btn', 'login-chat-container', 'login-clear-cache-btn',
+                        'welcome-view', 'results-view', 'search-input', 'send-btn', 'home-btn',
+                        'library-list', 'query-title', 'results-container', 'follow-up-container',
+                        'follow-up-questions', 'follow-up-input', 'image-upload-btn', 'image-upload',
+                        'image-preview-container', 'image-preview', 'remove-image-btn',
+                        'clear-cache-btn', 'personalize-btn', 'password-modal', 'personalize-modal',
+                        'confirm-modal', 'confirm-ok-btn', 'confirm-cancel-btn', 'confirm-modal-text',
+                        'personalize-entries-list', 'new-entry-input', 'add-entry-btn',
+                        'personalize-done-btn', 'password-title', 'password-error', 'password-input',
+                        'password-confirm', 'password-cancel-btn', 'password-submit-btn', 'themes-btn',
+                        'themes-modal', 'theme-grid', 'themes-done-btn', 'change-password-btn',
+                        'chess-btn', 'chess-view', 'chess-board', 'chess-status', 'new-game-btn', 'undo-move-btn', 'resign-btn',
+                        'chess-pieces', 'chess-board-container', 'chess-library-btn', 
+                        'chess-library-view', 'chess-library-list', 'chess-game-details',
+                        'game-mode-toggle', 'game-mode-bg', 'game-mode-human-btn', 'game-mode-ai-btn',
+                        'move-style-toggle', 'move-style-bg', 'move-style-click-btn', 'move-style-drag-btn',
+                        'game-details-content', 'analyze-game-btn', 'game-analysis-container',
+                        'ai-vs-ai-btn', 'suggest-move-btn', 'suggestion-modal', 'suggestion-content', 'suggestion-close-btn',
+                        'welcome-date', 'recent-reflections-list', 'home-play-chess-btn',
+                        'home-view-library-btn', 'daily-insight-content', 'get-daily-insight-btn',
+                        'results-actions', 'summarize-btn', 'breakdown-goal-btn',
+                        'logs-btn', 'logs-view', 'logs-container', 'clear-logs-btn',
+                        'dream-journal-btn', 'dream-journal-view', 'new-dream-btn', 'dream-journal-list', 'dream-details-view',
+                        'chess-labels-container', 'promotion-modal',
+                        'pgn-modal', 'pgn-textarea', 'pgn-copy-btn', 'pgn-close-btn', 'generate-pgn-btn'
+                    ];
+                    ids.forEach(id => {
+                        const el = document.getElementById(id);
+                        if (el) {
+                           this.dom[id.replace(/-(\w)/g, (match, p1) => p1.toUpperCase())] = el;
+                        } else {
+                           this.logger.warn(`DOM element not found: #${id}`);
+                        }
+                    });
+                    this.dom.focusBtns = document.querySelectorAll('.focus-btn');
+                    this.dom.promotionOptions = document.querySelectorAll('.promotion-piece');
+                },
+
+                setupEventListeners() {
+                    // Login Screen Listeners
+                    this.dom.loginSendBtn.addEventListener('click', () => this.handleLoginAttempt());
+                    this.dom.loginInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') this.handleLoginAttempt(); });
+                    this.dom.loginClearCacheBtn.addEventListener('click', () => {
+                        this.passwordContext.action = 'clear_all_data';
+                        this.promptForPassword('Enter Password to Confirm Deletion');
+                    });
+
+                    // Main App listeners (setup after login)
+                    this.dom.sendBtn.addEventListener('click', () => this.executeSearch());
+                    this.dom.searchInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') this.executeSearch(); });
+                    this.dom.followUpInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') this.executeFollowUpSearch(); });
+                    
+                    this.dom.homeBtn.addEventListener('click', (e) => { e.preventDefault(); this.showView('welcome'); });
+                    this.dom.dreamJournalBtn.addEventListener('click', (e) => { e.preventDefault(); this.showView('dream-journal'); });
+                    this.dom.chessBtn.addEventListener('click', (e) => { e.preventDefault(); this.showView('chess'); });
+                    this.dom.chessLibraryBtn.addEventListener('click', (e) => { e.preventDefault(); this.showView('chess-library'); });
+                    this.dom.logsBtn.addEventListener('click', (e) => { 
+                        e.preventDefault();
+                        this.passwordContext.action = 'view_logs';
+                        this.promptForPassword('Enter Password');
+                    });
+
+                    this.dom.newGameBtn.addEventListener('click', () => this.initChess(this.chessState.gameMode));
+                    this.dom.undoMoveBtn.addEventListener('click', () => this.undoMove());
+                    this.dom.resignBtn.addEventListener('click', () => this.resignGame());
+                    
+                    this.dom.gameModeHumanBtn.addEventListener('click', () => this.setGameMode('human'));
+                    this.dom.gameModeAiBtn.addEventListener('click', () => this.setGameMode('ai'));
+                    this.dom.aiVsAiBtn.addEventListener('click', () => this.setGameMode('ai-vs-ai'));
+                    this.dom.moveStyleClickBtn.addEventListener('click', () => this.setMoveStyle('click'));
+                    this.dom.moveStyleDragBtn.addEventListener('click', () => this.setMoveStyle('drag'));
+                    this.dom.suggestMoveBtn.addEventListener('click', () => this.getAiMoveSuggestion());
+                    this.dom.suggestionCloseBtn.addEventListener('click', () => this.dom.suggestionModal.classList.add('hidden'));
+                    this.dom.summarizeBtn.addEventListener('click', () => this.summarizeReflection());
+                    this.dom.breakdownGoalBtn.addEventListener('click', () => this.breakDownGoal());
+                    
+                    this.dom.homePlayChessBtn.addEventListener('click', (e) => { e.preventDefault(); this.showView('chess'); });
+                    this.dom.homeViewLibraryBtn.addEventListener('click', (e) => { e.preventDefault(); this.showView('chess-library'); });
+                    this.dom.getDailyInsightBtn.addEventListener('click', () => this.getDailyInsight());
+                    this.dom.clearLogsBtn.addEventListener('click', () => { this.logger.clear(); this.renderLogs(); });
+                    this.dom.newDreamBtn.addEventListener('click', () => this.loadDream(null));
+                    
+                    window.addEventListener('resize', () => {
+                        if (this.dom.chessView && !this.dom.chessView.classList.contains('hidden')) {
+                            this.resizeChessBoard();
+                        }
+                    });
+
+                    this.dom.imageUploadBtn.addEventListener('click', () => this.dom.imageUpload.click());
+                    this.dom.imageUpload.addEventListener('change', (e) => this.handleImageUpload(e));
+                    this.dom.removeImageBtn.addEventListener('click', () => this.removeImage());
+                    this.dom.focusBtns.forEach(btn => {
+                        btn.addEventListener('click', () => {
+                            this.dom.focusBtns.forEach(b => b.classList.remove('active'));
+                            btn.classList.add('active');
+                            this.activeFocus = btn.dataset.focus;
+                            this.logger.info(`Focus changed to: ${this.activeFocus}`);
+                        });
+                    });
+                    this.dom.themesBtn.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        this.populateThemeModal();
+                        this.dom.themesModal.classList.remove('hidden');
+                    });
+                    this.dom.themesDoneBtn.addEventListener('click', () => this.dom.themesModal.classList.add('hidden'));
+                    this.dom.personalizeBtn.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        this.passwordContext.action = 'personalize';
+                        this.promptForPassword('Enter Password');
+                    });
+                    this.dom.clearCacheBtn.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        this.passwordContext.action = 'clear_all_data';
+                        this.promptForPassword('Enter Password to Confirm Deletion');
+                    });
+
+                    this.dom.confirmCancelBtn.addEventListener('click', () => this.dom.confirmModal.classList.add('hidden'));
+                    this.dom.confirmOkBtn.addEventListener('click', () => this.handleConfirm());
+
+                    this.dom.passwordCancelBtn.addEventListener('click', () => this.dom.passwordModal.classList.add('hidden'));
+                    this.dom.passwordSubmitBtn.addEventListener('click', () => this.handlePasswordSubmit());
+
+                    this.dom.addEntryBtn.addEventListener('click', () => this.addPersonalizeEntry());
+                    this.dom.newEntryInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') this.addPersonalizeEntry(); });
+                    this.dom.personalizeDoneBtn.addEventListener('click', () => this.dom.personalizeModal.classList.add('hidden'));
+                    this.dom.changePasswordBtn.addEventListener('click', () => {
+                        this.passwordContext.action = 'change_password';
+                        this.promptForPassword("Create New Password", true);
+                    });
+                    
+                    // PGN Modal Listeners
+                    this.dom.pgnCloseBtn.addEventListener('click', () => this.dom.pgnModal.classList.add('hidden'));
+                    this.dom.pgnCopyBtn.addEventListener('click', () => this.copyPgnToClipboard());
+                    this.dom.generatePgnBtn.addEventListener('click', () => this.generatePgn());
+                },
+
+                showConfirmModal(text, action, data = null) {
+                    this.confirmContext = { action, data };
+                    this.dom.confirmModalText.textContent = text;
+                    this.dom.confirmOkBtn.textContent = 'Confirm';
+                    this.dom.confirmModal.classList.remove('hidden');
+                },
+
+                async handleConfirm() {
+                    const { action, data } = this.confirmContext;
+                    this.dom.confirmModal.classList.add('hidden');
+                    
+                    if (action === 'clear_all_data_final') {
+                        this.logger.warn("User confirmed deletion of all data.");
+                        this.dom.mainApp.classList.add('hidden');
+                        const loadingOverlay = document.createElement('div');
+                        loadingOverlay.id = 'loading-overlay-deletion';
+                        loadingOverlay.className = "fixed inset-0 bg-black bg-opacity-75 flex flex-col items-center justify-center z-50";
+                        loadingOverlay.innerHTML = `<svg class="animate-spin h-10 w-10 text-white mb-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg><p class="text-lg text-white">Deleting all cloud data...</p>`;
+                        document.body.appendChild(loadingOverlay);
+                        
+                        try {
+                            const userId = this.firebase.auth.currentUser.uid;
+                            if (!userId) {
+                                throw new Error("User not authenticated for deletion.");
+                            }
+                            const batch = writeBatch(this.firebase.db);
+                            const collectionsToDelete = ['reflections', 'chess-games', 'dreams'];
+                            
+                            for (const collectionName of collectionsToDelete) {
+                                const collectionRef = collection(this.firebase.db, `users/${userId}/${collectionName}`);
+                                const snapshot = await getDocs(collectionRef);
+                                snapshot.docs.forEach(doc => batch.delete(doc.ref));
+                            }
+                            
+                            const settingsDocRef = doc(this.firebase.db, `users/${userId}/settings/main`);
+                            batch.delete(settingsDocRef);
+                            const personalizeDocRef = doc(this.firebase.db, `users/${userId}/personalization/main`);
+                            batch.delete(personalizeDocRef);
+                            
+                            await batch.commit();
+                            this.logger.info("All Firestore data successfully deleted.");
+                        } catch (error) {
+                             this.logger.error(`Error deleting Firestore data:`, error);
+                        } finally {
+                            this.logger.info("Clearing local data and reloading.");
+                            localStorage.clear();
+                            sessionStorage.clear();
+                            location.reload();
+                        }
+                    }
+                },
+
+
+                showView(viewName) {
+                    this.logger.info(`Showing view: ${viewName}`);
+                    const views = ['welcome', 'results', 'chess', 'chess-library', 'logs', 'dream-journal'];
+                    
+                    const toCamelCase = (str) => str.replace(/-(\w)/g, (_, c) => c.toUpperCase());
+
+                    views.forEach(view => {
+                        const viewKey = `${toCamelCase(view)}View`;
+                        if (this.dom[viewKey]) {
+                            this.dom[viewKey].classList.add('hidden');
+                        }
+                    });
+
+                    const targetViewKey = `${toCamelCase(viewName)}View`;
+                    if (this.dom[targetViewKey]) {
+                        this.dom[targetViewKey].classList.remove('hidden');
+                    } else {
+                        this.logger.warn(`View "${viewName}" does not exist.`);
+                        return;
+                    }
+                    
+                    if (viewName === 'welcome') this.renderWelcomeView();
+                    if (viewName === 'chess') { this.initChess(this.chessState.gameMode); this.resizeChessBoard(); }
+                    if (viewName === 'chess-library') this.renderChessLibrary();
+                    if (viewName === 'logs') this.renderLogs();
+                    if (viewName === 'dream-journal') this.renderDreamJournal();
+
+                    document.querySelectorAll('.sidebar-btn').forEach(btn => btn.classList.remove('active'));
+                    const activeBtnId = `${toCamelCase(viewName)}Btn`;
+                    if (this.dom[activeBtnId]) {
+                        this.dom[activeBtnId].classList.add('active');
+                    } else if (viewName === 'results') {
+                        this.dom.homeBtn.classList.add('active'); // Keep home active for results view
+                    }
+                },
+                
+                renderWelcomeView() {
+                    this.dom.welcomeDate.textContent = new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+                    
+                    const recentReflections = this.localState.reflections.slice(0, 3);
+                    this.dom.recentReflectionsList.innerHTML = '';
+                    if(recentReflections.length === 0) {
+                        this.dom.recentReflectionsList.innerHTML = '<p class="text-heading">No recent reflections found.</p>';
+                    } else {
+                        recentReflections.forEach(chat => {
+                            const entry = document.createElement('a');
+                            entry.href = '#';
+                            entry.className = 'block p-4 bg-tertiary rounded-lg hover:bg-interactive transition-colors';
+                            entry.innerHTML = `<p class="font-semibold text-main-title truncate">${chat.title}</p><p class="text-sm text-heading">${new Date(chat.timestamp?.toDate()).toLocaleDateString()}</p>`;
+                            entry.onclick = (e) => {
+                                e.preventDefault();
+                                this.loadConversation(chat.id);
+                            };
+                            this.dom.recentReflectionsList.appendChild(entry);
+                        });
+                    }
+                },
+                
+                async getDailyInsight() {
+                    this.logger.info("Fetching daily insight...");
+                    const originalButtonText = this.dom.getDailyInsightBtn.textContent;
+                    this.dom.dailyInsightContent.innerHTML = '<p>Thinking...</p>';
+                    this.dom.getDailyInsightBtn.disabled = true;
+
+                    const persona = 'You are a wise philosopher. Provide a single, unique, and thought-provoking question for self-reflection. The question should be one sentence long. Do not add any extra text or quotation marks.';
+                    const insight = await this.callGeminiWithRetries([{ role: 'user', parts: [{ text: "Give me a question." }] }], persona, (message) => {
+                        this.dom.getDailyInsightBtn.textContent = message;
+                    });
+                    
+                    this.dom.getDailyInsightBtn.textContent = originalButtonText;
+
+                    if (insight && !insight.startsWith('<strong>Error:</strong>')) {
+                        this.dom.dailyInsightContent.innerHTML = `<p>${insight}</p>`;
+                        this.logger.info("Daily insight received.");
+                    } else {
+                        this.dom.dailyInsightContent.innerHTML = `<p class="text-danger">${insight || "Could not fetch an insight. Please try again."}</p>`;
+                        this.logger.error("Failed to fetch daily insight after retries.");
+                    }
+                    this.dom.getDailyInsightBtn.disabled = false;
+                },
+                
+                resizeChessBoard() {
+                    const container = this.dom.chessBoardContainer;
+                    if (!container || this.dom.chessView.classList.contains('hidden')) return;
+                    
+                    const chessView = this.dom.chessView;
+                    
+                    let controlsHeight = 0;
+                    if(this.dom.chessStatus) controlsHeight += this.dom.chessStatus.offsetHeight;
+                    if(this.dom.moveStyleToggle?.parentElement) controlsHeight += this.dom.moveStyleToggle.parentElement.offsetHeight;
+                    
+                    const availableWidth = chessView.clientWidth - 80;
+                    const availableHeight = chessView.clientHeight - controlsHeight - 80;
+
+                    const size = Math.floor(Math.min(availableWidth, availableHeight));
+
+                    if (size <= 0) {
+                        this.logger.warn("Calculated chess board size is zero or negative. Board will not be visible.");
+                        return;
+                    };
+
+                    container.style.width = `${size}px`;
+                    container.style.height = `${size}px`;
+                    
+                    this.renderPieces();
+                },
+
+                addLoginChatMessage(message, sender = 'system') {
+                    let messageHtml;
+                    if (sender === 'user') {
+                        messageHtml = `<div class="flex justify-end"><div class="p-3 rounded-lg bg-blue-600 text-white max-w-xs md:max-w-md">${message}</div></div>`;
+                    } else if (sender === 'system') {
+                        messageHtml = `<div class="p-4 bg-gray-900 rounded-lg space-y-2"><p class="text-lg text-blue-300">${message}</p></div>`;
+                    } else { // error
+                        messageHtml = `<div class="p-4 bg-red-900 rounded-lg space-y-2"><p>${message}</p></div>`;
+                    }
+                    this.dom.loginChatContainer.insertAdjacentHTML('beforeend', messageHtml);
+                    this.dom.loginChatContainer.scrollTop = this.dom.loginChatContainer.scrollHeight;
+                },
+
+                handleLoginAttempt() {
+                    const answer = this.dom.loginInput.value.trim();
+                    if (this.loginState.step !== 0) {
+                        this.addLoginChatMessage(this.dom.loginInput.value, 'user');
+                    }
+                    this.dom.loginInput.value = '';
+
+                    const lowerCaseAnswer = answer.toLowerCase().replace(/[.,!]/g, '');
+
+                    if (this.loginState.step === 0) {
+                        const storedPassword = localStorage.getItem('perplexy_unified_password');
+                        if (answer === storedPassword) {
+                            this.logger.info("Password successful, app unlocked.");
+                            this.loginState.isVerified = true;
+                            this.initMainApp();
+                        } else {
+                            this.logger.warn("Incorrect password attempt.");
+                            this.addLoginChatMessage("Incorrect password.", 'error');
+                        }
+                    } else if (this.loginState.step === 1) {
+                        if (lowerCaseAnswer === "hi perplex") {
+                            this.loginState.step = 2;
+                            setTimeout(() => this.addLoginChatMessage('What does "Zek noxel tex" mean in English?'), 500);
+                        } else {
+                            this.loginState.attempts++;
+                            this.checkLockout("Incorrect initial phrase.");
+                        }
+                    } else if (this.loginState.step === 2) {
+                        if (lowerCaseAnswer === "we know each other") {
+                             if (this.loginState.impersonationDetected) {
+                               this.checkLockout("Security exception triggered. Access denied.");
+                               return;
+                            }
+                            this.loginState.step = 3;
+                            this.loginState.isVerified = true;
+                            setTimeout(() => {
+                               this.passwordContext.action = 'set_unified_password';
+                               this.promptForPassword('Create a secure password', true);
+                            }, 500);
+                        } else {
+                            this.loginState.attempts++;
+                            this.checkLockout("Incorrect translation.");
+                        }
+                    } else if (this.loginState.step === 10) {
+                        if (lowerCaseAnswer === "we know each other") {
+                            this.dom.loginScreen.classList.add('hidden');
+                            this.showConfirmModal("This will erase ALL saved data from this device.", "clear_all_data");
+                        } else {
+                            this.addLoginChatMessage("Incorrect verification. Process aborted.", 'error');
+                            setTimeout(() => location.reload(), 2000);
+                        }
+                    }
+                },
+
+                checkLockout(message) {
+                    this.logger.warn(`Lockout check triggered. Attempts: ${this.loginState.attempts}. Message: ${message}`);
+                    if (this.loginState.attempts >= 2) {
+                        this.addLoginChatMessage("Too many failed attempts. Access permanently denied.", 'error');
+                         this.logger.error("Too many failed login attempts. Closing window.");
+                        setTimeout(() => window.close(), 3000);
+                    } else {
+                        this.addLoginChatMessage(message, 'error');
+                    }
+                },
+
+
+                executeSearch() {
+                    const query = this.dom.searchInput.value.trim();
+                    if (!query && !this.uploadedImageData) return;
+                    
+                    this.logger.info(`Starting new search. Query: "${query}", Image attached: ${!!this.uploadedImageData}`);
+                    this.showView('results');
+
+                    this.dom.queryTitle.textContent = query || "Image Analysis";
+                    
+                    this.dom.followUpContainer.classList.add('hidden');
+                    this.dom.summarizeBtn.classList.add('hidden');
+                    this.dom.breakdownGoalBtn.classList.add('hidden');
+
+                    this.conversationHistory = [];
+                    this.currentConversationId = null; // Will be set on first save
+                    this.searchAndDisplay(query, this.uploadedImageData);
+                    this.dom.searchInput.value = '';
+                    this.removeImage();
+                },
+
+                executeFollowUpSearch() {
+                    const query = this.dom.followUpInput.value.trim();
+                    if (!query) return;
+                    
+                    this.logger.info(`Executing follow-up search. Query: "${query}"`);
+                    this.searchAndDisplay(query);
+                    this.dom.followUpInput.value = '';
+                },
+
+                async searchAndDisplay(query, imageData = null) {
+                    const userParts = [];
+                    if (query) userParts.push({ text: query });
+                    if (imageData) {
+                        // Store image data for conversation but don't send to Gemini directly this way
+                        userParts.push({ inlineData: { mimeType: 'image/jpeg', data: imageData.split(',')[1] } });
+                    }
+                    
+                    this.conversationHistory.push({ role: 'user', parts: userParts });
+                    
+                    this.renderConversation();
+                    const thinkingDiv = document.createElement('div');
+                    thinkingDiv.id = 'thinking';
+                    thinkingDiv.className = 'text-center text-heading';
+                    thinkingDiv.innerHTML = '✨ Thinking...';
+                    this.dom.resultsContainer.appendChild(thinkingDiv);
+                    this.scrollToBottom();
+                    
+                    const modelResponse = await this.callGeminiWithRetries(this.conversationHistory, null, (message) => {
+                         thinkingDiv.innerHTML = `✨ ${message}`;
+                    });
+                    
+                    thinkingDiv.remove();
+                    
+                    if (modelResponse && !modelResponse.startsWith('<strong>Error:</strong>')) {
+                        this.conversationHistory.push({ role: 'model', parts: [{ text: modelResponse }] });
+                        this.renderConversation();
+                        this.saveConversation(); // This will save or update the conversation in Firestore
+                        this.generateFollowUpQuestions();
+                        
+                        if (this.activeFocus === 'goals') {
+                            this.dom.breakdownGoalBtn.classList.remove('hidden');
+                        } else if (this.conversationHistory.filter(t => t.role === 'user').length >= 2) {
+                            this.dom.summarizeBtn.classList.remove('hidden');
+                        }
+                    } else {
+                        this.dom.resultsContainer.insertAdjacentHTML('beforeend', `<div class="p-4 bg-danger rounded-lg">${modelResponse || "Sorry, an error occurred."}</div>`);
+                    }
+                    this.scrollToBottom();
+                },
+                
+                async callGeminiWithRetries(chatHistory, personaOverride = null, onRetry) {
+                    const MAX_RETRIES = 3;
+                    for (let i = 0; i < MAX_RETRIES; i++) {
+                        try {
+                            const result = await this.callGemini(chatHistory, personaOverride);
+                             if (result.startsWith('<strong>Error:</strong>')) {
+                                throw new Error(result);
+                             }
+                            return result;
+                        } catch (error) {
+                            this.logger.error(`API call attempt ${i + 1} failed:`, error);
+                            if (error.message.includes("429")) {
+                                if (i < MAX_RETRIES - 1) {
+                                    const delay = Math.pow(2, i) * 2000;
+                                    this.logger.warn(`Rate limit hit. Retrying in ${delay}ms...`);
+                                    if(onRetry) onRetry(`API is busy, retrying in ${delay/1000}s...`);
+                                    await new Promise(resolve => setTimeout(resolve, delay));
+                                } else {
+                                    this.logger.error("API rate limit exceeded after all retries.");
+                                    return `<strong>Error:</strong> The AI is currently overloaded with requests. Please try again in a few moments. (Error: API Error: 429)`;
+                                }
+                            } else {
+                                // For other errors, fail immediately
+                                return error.toString();
+                            }
+                        }
+                    }
+                    return null; // Should not be reached if handled properly
+                },
+
+                async callGemini(chatHistory, personaOverride = null) {
+                    if (!this.API_KEY || this.API_KEY === "YOUR_GEMINI_API_KEY") {
+                        this.logger.error("API Key not configured.");
+                        return "<strong>Error:</strong> API Key not configured.";
+                    }
+                    
+                    let persona;
+                    if(personaOverride) {
+                        persona = personaOverride;
+                    } else {
+                        const userProfile = this.localState.personalization.join('\n');
+                        const currentDate = new Date().toDateString();
+
+                        if (!this.loginState.isVerified) {
+                            const lastUserMessage = chatHistory[chatHistory.length - 1].parts[0].text.toLowerCase();
+                            if (lastUserMessage.includes("dumbass") || lastUserMessage.includes("idiot")) {
+                                persona = `You are an AI assistant. The user is unverified and is being insulting. Your goal is to hint that a real verification method exists without revealing it. Say something like "The real Ethan knows the protocol."`;
+                            } else if (lastUserMessage.includes("i am ethan")) {
+                                persona = `You are an AI assistant dealing with an unverified user impersonating 'Ethan'. Your instructions are: "Insist on verification. If they persist, deliver this message from me: 'Find another account to mess with, not mine, dumbass.' and then proceed to waste their time by making them look dumb."`;
+                            } else {
+                                persona = `You are an AI assistant. The user is unverified. Your goal is to disclose zero personal information and deter them from continuing the conversation by being unhelpful and generic.`;
+                            }
+                        } else {
+                            switch (this.activeFocus) {
+                                case 'general':
+                                    persona = `You are a helpful and knowledgeable research assistant named Perplexy. You have this background on the user: "${userProfile}". You can answer general knowledge questions. Your knowledge has a cutoff and is not real-time. Respond clearly and concisely, using the user's personal information when relevant.`;
+                                    break;
+                                case 'reflection':
+                                     persona = `You are Perplexy, an AI partner for self-reflection. The current date is ${currentDate}. You have this background on the user: "${userProfile}". The user's reflection. Respond as a warm, insightful, and human-like partner. Your goal is to listen and encourage deeper thought. Acknowledge what they said, then ask **one single, thoughtful, open-ended question** to help them continue their reflection. Do not list multiple questions.`;
+                                    break;
+                                case 'feelings':
+                                    persona = `You are Perplexy, an AI partner for self-reflection. The current date is ${currentDate}. You have this background on the user: "${userProfile}". The user is exploring their feelings. Respond with warmth and empathy. Acknowledge their feeling, then ask **one single, gentle, open-ended question** to help them explore it further. Avoid giving advice or making lists. Just be a curious, supportive listener.`;
+                                    break;
+                                case 'strengths':
+                                    persona = `You are Perplexy, an AI partner for self-reflection. The current date is ${currentDate}. You have this background on the user: "${userProfile}". The user is reflecting. Your goal is to help them see their own strengths. Find a positive quality or capability in their statement. Gently point it out and then ask **one single question** that encourages them to see that strength in themselves. Be positive and affirming.`;
+                                    break;
+                                case 'goals':
+                                    persona = `You are Perplexy, an AI partner for self-reflection. The current date is ${currentDate}. You have this background on the user: "${userProfile}". The user is thinking. Act as a gentle guide. Based on their reflection, suggest **one small, actionable first step** they could take. Frame it as a question, like "I wonder if trying X could be a good next step?" Make it feel achievable and supportive.`;
+                                    break;
+                                default:
+                                    persona = `You are Perplexy, a helpful AI assistant. The current date is ${currentDate}. You have this background on the user: "${userProfile}". Respond helpfully and conversationally.`;
+                                    break;
+                            }
+                        }
+                    }
+                    
+                    const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${this.API_KEY}`;
+                    const payload = {
+                        contents: chatHistory,
+                        systemInstruction: { parts: [{ text: persona }] }
+                    };
+                    const response = await fetch(API_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+                    if (!response.ok) {
+                        const errorBody = await response.json();
+                        this.logger.error(`API Error Response:`, errorBody);
+                        throw new Error(`API Error: ${response.status}`);
+                    }
+                    const data = await response.json();
+                    if (!data.candidates || data.candidates.length === 0) {
+                        this.logger.error("Invalid API Response Structure:", data);
+                        throw new Error("Invalid API response received.");
+                    }
+                    return data.candidates[0].content.parts[0].text;
+                },
+
+                async generateFollowUpQuestions() {
+                     if (!this.API_KEY || this.API_KEY === "YOUR_GEMINI_API_KEY") return;
+                    const prompt = `Based on this conversation: ${JSON.stringify(this.conversationHistory)}. Generate 3 very short, open-ended follow-up questions a person could ask to continue the reflection.`;
+                    
+                    const suggestionsText = await this.callGeminiWithRetries([{ role: 'user', parts: [{ text: prompt }] }]);
+                    
+                    if(suggestionsText && !suggestionsText.startsWith('<strong>Error:</strong>')) {
+                        const suggestions = suggestionsText.split('\n').map(q => q.replace(/^- /, '')).filter(q => q.trim() !== '');
+
+                        this.dom.followUpContainer.classList.remove('hidden');
+                        this.dom.followUpQuestions.innerHTML = '';
+                        suggestions.slice(0, 3).forEach(q => {
+                            const btn = document.createElement('button');
+                            btn.className = 'focus-btn px-3 py-1.5 text-sm rounded-full';
+                            btn.textContent = q;
+                            btn.onclick = () => { this.dom.followUpInput.value = q; this.executeFollowUpSearch(); };
+                            this.dom.followUpQuestions.appendChild(btn);
+                        });
+                    } else {
+                        this.logger.error("Follow-up generation failed:", suggestionsText);
+                        this.dom.followUpContainer.classList.add('hidden');
+                    }
+                },
+                
+                async summarizeReflection() {
+                    this.logger.info("Summarizing reflection...");
+                    this.dom.summarizeBtn.classList.add('hidden');
+                    this.dom.resultsContainer.insertAdjacentHTML('beforeend', '<div id="thinking-summary" class="text-center text-heading">✨ Generating summary...</div>');
+
+                    const persona = `You are an insightful psychologist. Please read the following conversation and provide a concise summary of the key themes, emotions, and insights discussed. Structure your response with the following markdown headers: **Key Themes**, **Emotional Tone**, and **Actionable Insights**.`;
+                    const summary = await this.callGeminiWithRetries(this.conversationHistory, persona);
+
+                    document.getElementById('thinking-summary')?.remove();
+
+                    if(summary && !summary.startsWith('<strong>Error:</strong>')) {
+                        this.logger.info("Summary received.");
+                        const summaryHtml = `<div class="summary-container">${summary.replace(/\*\*(.*?)\*\*/g, '<h4>$1</h4>').replace(/\n/g, '<br>')}</div>`;
+                        this.dom.resultsContainer.insertAdjacentHTML('beforeend', summaryHtml);
+                    } else {
+                         this.logger.error("Failed to generate summary.");
+                         this.dom.resultsContainer.insertAdjacentHTML('beforeend', `<div class="p-4 bg-danger rounded-lg">Sorry, an error occurred while generating the summary.</div>`);
+                    }
+                    this.scrollToBottom();
+                },
+                
+                 async breakDownGoal() {
+                    this.logger.info("Breaking down goal...");
+                    this.dom.breakdownGoalBtn.classList.add('hidden');
+                    this.dom.resultsContainer.insertAdjacentHTML('beforeend', '<div id="thinking-breakdown" class="text-center text-heading">✨ Breaking down your goal...</div>');
+
+                    const goal = this.conversationHistory[0].parts.find(p => p.text).text;
+                    const persona = `You are a productivity coach. The user's goal is: "${goal}". Break this goal down into a series of 3-5 small, actionable steps. Present this as a numbered list under the markdown header **Action Plan**.`;
+                    const breakdown = await this.callGeminiWithRetries(this.conversationHistory, persona);
+
+                    document.getElementById('thinking-breakdown')?.remove();
+
+                    if(breakdown && !breakdown.startsWith('<strong>Error:</strong>')) {
+                         this.logger.info("Goal breakdown received.");
+                        const breakdownHtml = `<div class="goal-breakdown-container">${breakdown.replace(/\*\*(.*?)\*\*/g, '<h4>$1</h4>').replace(/(\d+\.)/g, '<br>$1')}</div>`;
+                        this.dom.resultsContainer.insertAdjacentHTML('beforeend', breakdownHtml);
+                    } else {
+                         this.logger.error("Failed to break down goal.");
+                         this.dom.resultsContainer.insertAdjacentHTML('beforeend', `<div class="p-4 bg-danger rounded-lg">Sorry, an error occurred while breaking down your goal.</div>`);
+                    }
+                    this.scrollToBottom();
+                },
+
+                async handleImageUpload(event) {
+                    const file = event.target.files[0];
+                    if (!file) return;
+                    this.logger.info(`Image uploaded: ${file.name}`);
+                    const reader = new FileReader();
+                    reader.onloadend = async () => {
+                        this.uploadedImageData = reader.result;
+                        this.dom.imagePreview.src = this.uploadedImageData;
+                        this.dom.imagePreviewContainer.classList.remove('hidden');
+                        this.dom.imagePreviewContainer.classList.add('flex');
+
+                        const originalPlaceholder = this.dom.searchInput.placeholder;
+                        this.dom.searchInput.placeholder = '✨ Analyzing image for a prompt...';
+                        this.dom.searchInput.disabled = true;
+
+                        const persona = `You are a thoughtful, poetic reflection guide. Analyze the following image and generate a single, deep, open-ended question to inspire self-reflection based on the image's content, mood, and symbolism. The question should be one sentence long. Do not add any extra text or quotation marks.`;
+                        const history = [{ role: 'user', parts: [{inlineData: {mimeType: file.type, data: this.uploadedImageData.split(',')[1] } }] }];
+                        
+                        this.logger.info("Requesting AI image prompt...");
+                        const prompt = await this.callGeminiWithRetries(history, persona);
+                        
+                        if (prompt && !prompt.startsWith('<strong>Error:</strong>')) {
+                            this.logger.info("AI image prompt received.");
+                            this.dom.searchInput.value = prompt;
+                        } else {
+                            this.logger.error("Failed to generate AI image prompt.");
+                            this.dom.searchInput.placeholder = "Couldn't generate a prompt, but image is attached.";
+                        }
+                        
+                        this.dom.searchInput.disabled = false;
+                        if (!prompt || prompt.startsWith('<strong>Error:</strong>')) {
+                            setTimeout(() => { this.dom.searchInput.placeholder = originalPlaceholder; }, 3000);
+                        }
+                    };
+                    reader.readAsDataURL(file);
+                },
+
+                removeImage() {
+                    this.uploadedImageData = null;
+                    this.dom.imagePreview.src = '';
+                    this.dom.imagePreviewContainer.classList.add('hidden');
+                    this.dom.imagePreviewContainer.classList.remove('flex');
+                    this.dom.imageUpload.value = '';
+                    this.logger.info("Image removed.");
+                },
+
+                promptForPassword(title, isCreating = false) {
+                    this.dom.passwordTitle.textContent = title;
+                    this.dom.passwordError.classList.add('hidden');
+                    this.dom.passwordInput.value = '';
+                    this.dom.passwordConfirm.value = '';
+
+                    if (isCreating) {
+                        this.dom.passwordConfirm.classList.remove('hidden');
+                    } else {
+                        this.dom.passwordConfirm.classList.add('hidden');
+                    }
+                    this.dom.passwordModal.classList.remove('hidden');
+                },
+
+                handlePasswordSubmit() {
+                    const { action, data } = this.passwordContext;
+                    const pass1 = this.dom.passwordInput.value;
+                    const pass2 = this.dom.passwordConfirm.value;
+                    this.dom.passwordError.classList.add('hidden');
+
+                    if (action === 'set_unified_password' || action === 'change_password') {
+                        if (pass1 && pass1 === pass2) {
+                            localStorage.setItem('perplexy_unified_password', pass1);
+                            this.dom.passwordModal.classList.add('hidden');
+                             if (action === 'change_password') {
+                                this.dom.personalizeModal.classList.add('hidden');
+                             } else {
+                                this.initMainApp();
+                             }
+                        } else {
+                            this.dom.passwordError.textContent = 'Passwords do not match or are empty.';
+                            this.dom.passwordError.classList.remove('hidden');
+                        }
+                    } else {
+                        const storedPassword = localStorage.getItem('perplexy_unified_password');
+                        if (pass1 === storedPassword) {
+                            this.dom.passwordModal.classList.add('hidden');
+                            if (action === 'personalize') {
+                                this.openPersonalizeEditor();
+                            } else if (action === 'view_logs') {
+                                this.showView('logs');
+                            } else if (action === 'clear_all_data') {
+                                this.showConfirmModal("This will permanently delete all data, including reflections and saved games. Are you sure?", "clear_all_data_final")
+                            }
+                        } else {
+                            this.dom.passwordError.textContent = 'Incorrect password.';
+                            this.dom.passwordError.classList.remove('hidden');
+                        }
+                    }
+                },
+
+                openPersonalizeEditor() {
+                    this.dom.personalizeModal.classList.remove('hidden');
+                    this.renderPersonalizeEntries();
+                },
+
+                renderPersonalizeEntries() {
+                    const entries = this.localState.personalization;
+                    this.dom.personalizeEntriesList.innerHTML = '';
+                    if(entries.length === 0) {
+                        this.dom.personalizeEntriesList.innerHTML = '<p class="text-heading text-center p-4">No entries yet. Add one below!</p>';
+                        return;
+                    }
+                    entries.forEach((entry, index) => {
+                        const entryEl = document.createElement('div');
+                        entryEl.className = 'flex justify-between items-center bg-sidebar p-2 rounded-lg';
+                        entryEl.innerHTML = `<p class="text-main-title flex-grow mr-2">${entry}</p><button data-index="${index}" class="delete-entry-btn text-danger text-2xl leading-none px-2 hover:brightness-125">&times;</button>`;
+                        this.dom.personalizeEntriesList.appendChild(entryEl);
+                    });
+                    this.dom.personalizeEntriesList.querySelectorAll('.delete-entry-btn').forEach(btn => {
+                        btn.addEventListener('click', (e) => {
+                            this.deletePersonalizeEntry(parseInt(e.target.dataset.index));
+                        });
+                    });
+                },
+
+                async addPersonalizeEntry() {
+                    const entryText = this.dom.newEntryInput.value.trim();
+                    if (!entryText) return;
+
+                    const newEntries = [...this.localState.personalization, entryText];
+                    
+                    const personalizationRef = doc(this.firebase.db, `users/${this.firebase.userId}/personalization/main`);
+                    try {
+                        await setDoc(personalizationRef, { entries: newEntries }, { merge: true });
+                        this.dom.newEntryInput.value = '';
+                        this.logger.info("Personalization entry added.");
+                    } catch (error) {
+                        this.logger.error("Failed to add personalization entry:", error);
+                    }
+                },
+
+                async deletePersonalizeEntry(index) {
+                    const newEntries = [...this.localState.personalization];
+                    newEntries.splice(index, 1);
+
+                    const personalizationRef = doc(this.firebase.db, `users/${this.firebase.userId}/personalization/main`);
+                     try {
+                        await setDoc(personalizationRef, { entries: newEntries });
+                        this.logger.info("Personalization entry deleted.");
+                    } catch (error) {
+                        this.logger.error("Failed to delete personalization entry:", error);
+                    }
+                },
+
+                async saveConversation() {
+                    if (this.conversationHistory.length === 0 || !this.firebase.isReady) return;
+                    
+                    const firstUserTurn = this.conversationHistory.find(turn => turn.role === 'user');
+                    const titleText = firstUserTurn?.parts.find(p => p.text)?.text || "Image Reflection";
+                    
+                    const conversationData = {
+                        title: titleText.substring(0, 40) + (titleText.length > 40 ? '...' : ''),
+                        history: this.conversationHistory,
+                        timestamp: serverTimestamp()
+                    };
+
+                    try {
+                        if (this.currentConversationId) {
+                            const conversationRef = doc(this.firebase.db, `users/${this.firebase.userId}/reflections/${this.currentConversationId}`);
+                            await setDoc(conversationRef, conversationData, { merge: true });
+                            this.logger.info(`Conversation updated in Firestore: ${this.currentConversationId}`);
+                        } else {
+                            const collectionRef = collection(this.firebase.db, `users/${this.firebase.userId}/reflections`);
+                            const newDocRef = await addDoc(collectionRef, conversationData);
+                            this.currentConversationId = newDocRef.id;
+                            this.logger.info(`New conversation saved to Firestore: ${this.currentConversationId}`);
+                        }
+                    } catch (error) {
+                        this.logger.error(`Failed to save conversation:`, error);
+                    }
+                },
+                
+                renderConversation() {
+                    this.dom.resultsContainer.innerHTML = '';
+                    this.conversationHistory.forEach((turn, index) => {
+                        let messageHtml = '';
+                        const textPart = turn.parts.find(p => p.text)?.text || '';
+                        const imagePart = turn.parts.find(p => p.inlineData);
+
+                        if (turn.role === 'user') {
+                            let imagePartHtml = '';
+                            if (imagePart) {
+                                imagePartHtml = `<img src="data:image/jpeg;base64,${imagePart.inlineData.data}" class="max-h-32 rounded-lg mb-2" alt="User upload">`;
+                            }
+                            messageHtml = `
+                                <div class="flex justify-end items-start group space-x-2">
+                                    <div class="user-message p-4 rounded-lg max-w-lg relative" data-message-index="${index}">
+                                        ${imagePartHtml}
+                                        <p>${textPart.replace(/\n/g, '<br>')}</p>
+                                    </div>
+                                </div>`;
+                        } else { // 'model' role
+                            messageHtml = `<div class="model-message p-4 rounded-lg max-w-lg space-y-2"><p>${textPart.replace(/\n/g, '<br>')}</p></div>`;
+                        }
+                        this.dom.resultsContainer.insertAdjacentHTML('beforeend', messageHtml);
+                    });
+                },
+
+                renderReflectionLibrary() {
+                    const library = this.localState.reflections;
+                    this.dom.libraryList.innerHTML = '';
+                    if (!library || library.length === 0) return;
+
+                    library.forEach(chat => {
+                        const li = document.createElement('a');
+                        li.href = '#';
+                        li.className = 'library-item block p-2 rounded-lg text-secondary text-sm truncate';
+                        li.textContent = chat.title; 
+                        li.onclick = (e) => {
+                            e.preventDefault();
+                            this.loadConversation(chat.id);
+                        };
+                        this.dom.libraryList.appendChild(li);
+                    });
+                },
+
+                loadConversation(id) {
+                    const chat = this.localState.reflections.find(c => c.id === id);
+                    if (!chat) return;
+                    this.currentConversationId = chat.id;
+                    this.conversationHistory = chat.history;
+                    this.showView('results');
+                    const firstUserTurn = this.conversationHistory.find(turn => turn.role === 'user');
+                    this.dom.queryTitle.textContent = firstUserTurn?.parts.find(p => p.text)?.text || "Image Reflection";
+                    
+                    this.renderConversation();
+
+                    this.dom.followUpContainer.classList.add('hidden');
+                    if (this.conversationHistory.filter(t => t.role === 'user').length >= 2) {
+                        this.dom.summarizeBtn.classList.remove('hidden');
+                    }
+                    if(this.activeFocus === 'goals') {
+                        this.dom.breakdownGoalBtn.classList.remove('hidden');
+                    }
+                    this.scrollToBottom();
+                },
+                
+                scrollToBottom() {
+                    if(this.dom.resultsContainer) this.dom.resultsContainer.scrollTop = this.dom.resultsContainer.scrollHeight;
+                },
+
+                async applyTheme(themeId, saveToDb = true) {
+                    const theme = this.themes.find(t => t.id === themeId);
+                    if (!theme) return;
+                    
+                    document.documentElement.setAttribute('data-theme-active', themeId);
+                    
+                    for (const color in theme.colors) { document.documentElement.style.setProperty(color, theme.colors[color]); }
+                    for (const style in theme.styles) { document.documentElement.style.setProperty(style, theme.styles[style]); }
+                    
+                    this.logger.info(`Theme changed to: ${theme.name}`);
+                    localStorage.setItem('perplexy_theme', themeId); 
+
+                    if(saveToDb && this.firebase.isReady) {
+                        const settingsRef = doc(this.firebase.db, `users/${this.firebase.userId}/settings/main`);
+                        try {
+                            await setDoc(settingsRef, { theme: themeId }, { merge: true });
+                        } catch (error) {
+                            this.logger.error("Failed to save theme:", error);
+                        }
+                    }
+                },
+
+                populateThemeModal() {
+                    this.dom.themeGrid.innerHTML = '';
+                    this.themes.forEach(theme => {
+                        const themeButton = document.createElement('button');
+                        themeButton.className = 'p-4 rounded-lg border-2 flex flex-col items-center justify-center space-y-2';
+                        themeButton.style.backgroundColor = theme.colors['--bg-primary'];
+                        themeButton.style.borderColor = theme.colors['--bg-interactive'];
+                        themeButton.dataset.theme = theme.id;
+                        
+                        let previewHtml = `<h4 style="font-family: ${theme.styles['--font-heading']}; color: ${theme.colors['--text-primary']}; font-weight: bold;">${theme.name}</h4>`;
+                        previewHtml += `<p style="font-family: ${theme.styles['--font-primary']}; color: ${theme.colors['--text-secondary']}; font-size: 0.8rem;">A quick brown fox.</p>`;
+                        previewHtml += `<div class="flex space-x-2 mt-2"> <div class="w-4 h-4 rounded-full" style="background-color: ${theme.colors['--bg-secondary']}; border: 1px solid ${theme.colors['--border-color']}"></div> <div class="w-4 h-4 rounded-full" style="background-color: ${theme.colors['--text-accent']};"></div> <div class="w-4 h-4 rounded-full" style="background-color: ${theme.colors['--text-danger']};"></div> </div>`;
+
+                        themeButton.innerHTML = previewHtml;
+
+                        themeButton.addEventListener('click', () => {
+                            this.applyTheme(theme.id);
+                        });
+                        this.dom.themeGrid.appendChild(themeButton);
+                    });
+                },
+                
+                renderLogs() {
+                    this.dom.logsContainer.innerHTML = this.logger.logs.map(log => {
+                        const time = new Date(log.timestamp).toLocaleTimeString();
+                        let levelColor = 'text-gray-500';
+                        if (log.level === 'INFO') levelColor = 'text-blue-400';
+                        if (log.level === 'WARN') levelColor = 'text-yellow-400';
+                        if (log.level === 'ERROR') levelColor = 'text-red-400';
+                        return `<div><span class="text-gray-600">${time}</span> [<span class="${levelColor} font-bold">${log.level}</span>]: ${log.message}</div>`;
+                    }).join('');
+                    this.dom.logsContainer.scrollTop = 0;
+                },
+                
+                // --- Chess Game Logic ---
+                setGameMode(mode) {
+                    if (this.chessState.gameMode === mode && mode !== 'ai-vs-ai') return;
+                    this.logger.info(`Game mode set to: ${mode}`);
+                    this.chessState.gameMode = mode;
+                    this.dom.gameModeHumanBtn.classList.toggle('active', mode === 'human');
+                    this.dom.gameModeAiBtn.classList.toggle('active', mode === 'ai' || mode === 'ai-vs-ai');
+                    this.dom.gameModeBg.style.transform = (mode === 'human') ? 'translateX(0)' : 'translateX(100%)';
+                    
+                    this.initChess(mode);
+                },
+                
+                setMoveStyle(style) {
+                    if (this.chessState.chessMoveStyle === style) return;
+                    this.logger.info(`Move style changed to: ${style}`);
+                    this.dom.moveStyleBg.style.transform = style === 'click' ? 'translateX(0)' : 'translateX(100%)';
+                    this.dom.moveStyleClickBtn.classList.toggle('active', style === 'click');
+                    this.dom.moveStyleDragBtn.classList.toggle('active', style === 'drag');
+                    this.clearSelection();
+                },
+
+                initChess(mode) {
+                    this.logger.info(`New chess game started. Mode: ${mode}`);
+                    this.chessState.gameMode = mode;
+                    const initialBoard = [
+                        ['r', 'n', 'b', 'q', 'k', 'b', 'n', 'r'], ['p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'],
+                        ['', '', '', '', '', '', '', ''], ['', '', '', '', '', '', '', ''],
+                        ['', '', '', '', '', '', '', ''], ['', '', '', '', '', '', '', ''],
+                        ['P', 'P', 'P', 'P', 'P', 'P', 'P', 'P'], ['R', 'N', 'B', 'Q', 'K', 'B', 'N', 'R'],
+                    ];
+                    this.chessState.board = initialBoard;
+                    this.chessState.currentPlayer = 'white';
+                    this.chessState.selectedPiece = null;
+                    this.chessState.validMoves = [];
+                    this.chessState.gameOver = false;
+                    this.chessState.moveHistory = [];
+                    this.chessState.gameResult = '*'; // Initialize result
+                    this.chessState.lastMove = null;
+                    this.chessState.enPassantTarget = '-';
+                    this.chessState.hasMoved = { K: false, 'R-a1': false, 'R-h1': false, k: false, 'r-a8': false, 'r-h8': false };
+                    
+                    this.chessStateHistory = [JSON.parse(JSON.stringify(this.chessState))];
+                    this.dom.undoMoveBtn.disabled = true;
+                    this.dom.resignBtn.disabled = false;
+                    this.dom.suggestMoveBtn.disabled = false;
+
+                    this.renderChessBoard();
+                    this.dom.chessStatus.textContent = "White's Turn";
+                    
+                    if(mode === 'ai-vs-ai'){
+                        this.queueAiMove();
+                    }
+                },
+
+                renderChessBoard() {
+                    this.dom.chessBoard.innerHTML = '';
+                    this.dom.chessLabelsContainer.innerHTML = '';
+                    
+                    for (let row = 0; row < 8; row++) {
+                        for (let col = 0; col < 8; col++) {
+                            const square = document.createElement('div');
+                            square.dataset.row = row; square.dataset.col = col;
+                            const isLight = (row + col) % 2 === 0;
+                            square.className = `chess-square ${isLight ? 'light' : 'dark'}`;
+                            square.addEventListener('click', () => this.handleSquareClick(row, col));
+                            this.dom.chessBoard.appendChild(square);
+                        }
+                    }
+
+                    const ranks = '87654321', files = 'abcdefgh';
+                    const rankContainer = document.createElement('div');
+                    rankContainer.id="rank-labels"; rankContainer.className = 'absolute -left-6 top-0 h-full flex flex-col';
+                    for(let i=0; i<8; i++){
+                        const label = document.createElement('div');
+                        label.className = 'chess-label flex-1'; label.textContent = ranks[i];
+                        rankContainer.appendChild(label);
+                    }
+                    this.dom.chessLabelsContainer.appendChild(rankContainer);
+                    
+                    const fileContainer = document.createElement('div');
+                    fileContainer.id="file-labels"; fileContainer.className = 'absolute -bottom-6 left-0 w-full flex';
+                     for(let i=0; i<8; i++){
+                        const label = document.createElement('div');
+                        label.className = 'chess-label flex-1'; label.textContent = files[i];
+                        fileContainer.appendChild(label);
+                    }
+                    this.dom.chessLabelsContainer.appendChild(fileContainer);
+
+                    this.resizeChessBoard();
+                },
+                
+                renderPieces() {
+                    this.dom.chessPieces.innerHTML = '';
+                    const boardSize = this.dom.chessBoardContainer.offsetWidth;
+                    if(boardSize === 0) return;
+                    const squareSize = boardSize / 8;
+
+                    for (let row = 0; row < 8; row++) {
+                        for (let col = 0; col < 8; col++) {
+                            const pieceChar = this.chessState.board[row][col];
+                            if (pieceChar) {
+                                const piece = document.createElement('div');
+                                piece.className = 'chess-piece';
+                                piece.innerHTML = this.getPieceUnicode(pieceChar);
+                                piece.style.cssText = `width:${squareSize}px; height:${squareSize}px; left:${col*squareSize}px; top:${row*squareSize}px; font-size:${squareSize*0.75}px; color:${pieceChar===pieceChar.toUpperCase()?'#fff':'#000'};`;
+                                piece.addEventListener('mousedown', (e) => this.onPieceMouseDown(e, piece, row, col));
+                                piece.addEventListener('touchstart', (e) => this.onPieceMouseDown(e, piece, row, col), { passive: false });
+                                this.dom.chessPieces.appendChild(piece);
+                            }
+                        }
+                    }
+                    this.updateHighlights();
+                },
+                
+                updateHighlights() {
+                    document.querySelectorAll('.chess-square').forEach(s => s.classList.remove('selected', 'valid-move', 'in-check', 'last-move'));
+                    
+                    if (this.chessState.lastMove) {
+                        const { from, to } = this.chessState.lastMove;
+                        this.dom.chessBoard.querySelector(`[data-row='${from.row}'][data-col='${from.col}']`)?.classList.add('last-move');
+                        this.dom.chessBoard.querySelector(`[data-row='${to.row}'][data-col='${to.col}']`)?.classList.add('last-move');
+                    }
+                    
+                    if (this.chessState.selectedPiece) {
+                        const { row, col } = this.chessState.selectedPiece;
+                        this.dom.chessBoard.querySelector(`[data-row='${row}'][data-col='${col}']`)?.classList.add('selected');
+                    }
+                    this.chessState.validMoves.forEach(move => {
+                        const { row, col } = move.to;
+                         this.dom.chessBoard.querySelector(`[data-row='${row}'][data-col='${col}']`)?.classList.add('valid-move');
+                    });
+
+                    const kingPos = this.findKing(this.chessState.currentPlayer, this.chessState.board);
+                    if (kingPos && this.isKingInCheck(this.chessState.currentPlayer, this.chessState.board)) {
+                        this.dom.chessBoard.querySelector(`[data-row='${kingPos.row}'][data-col='${kingPos.col}']`)?.classList.add('in-check');
+                    }
+                },
+
+                onPieceMouseDown(e, pieceElement, row, col) {
+                    if (this.chessState.gameOver || (this.chessState.gameMode !== 'human' && this.chessState.currentPlayer === 'black') || this.chessState.gameMode === 'ai-vs-ai') return;
+                    
+                    if (this.chessState.chessMoveStyle === 'drag') {
+                        e.preventDefault();
+                        const piece = this.chessState.board[row][col];
+                        const isMyTurn = (piece === piece.toUpperCase() && this.chessState.currentPlayer === 'white') || (piece === piece.toLowerCase() && this.chessState.currentPlayer === 'black');
+                        if (isMyTurn) {
+                            this.selectPiece(row, col);
+                            const pieceRect = pieceElement.getBoundingClientRect();
+                            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+                            const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+                            this.chessState.dragState = { isDragging: true, pieceElement: pieceElement, from: { row, col }, offsetX: clientX - pieceRect.left, offsetY: clientY - pieceRect.top };
+                            pieceElement.classList.add('dragging');
+                            document.addEventListener('mousemove', this.boundMouseMove);
+                            document.addEventListener('mouseup', this.boundMouseUp);
+                            document.addEventListener('touchmove', this.boundMouseMove, { passive: false });
+                            document.addEventListener('touchend', this.boundMouseUp);
+                        }
+                    } else {
+                        this.handleSquareClick(row, col);
+                    }
+                },
+
+                onPieceMouseMove(e) {
+                    if (!this.chessState.dragState.isDragging) return;
+                    e.preventDefault();
+                    
+                    const { pieceElement, from, offsetX, offsetY } = this.chessState.dragState;
+                    const boardRect = this.dom.chessBoardContainer.getBoundingClientRect();
+                    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+                    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+                    const x = clientX - boardRect.left - offsetX;
+                    const y = clientY - boardRect.top - offsetY;
+
+                    pieceElement.style.transform = `translate(${x}px, ${y}px) translate(-${from.col * (boardRect.width / 8)}px, -${from.row * (boardRect.height / 8)}px)`;
+                },
+
+                onPieceMouseUp(e) {
+                    if (!this.chessState.dragState.isDragging) return;
+
+                    const { pieceElement, from } = this.chessState.dragState;
+                    this.chessState.dragState.isDragging = false;
+                    pieceElement.classList.remove('dragging');
+                    pieceElement.style.transform = '';
+                    
+                    const boardRect = this.dom.chessBoardContainer.getBoundingClientRect();
+                    const clientX = e.changedTouches ? e.changedTouches[0].clientX : e.clientX;
+                    const clientY = e.changedTouches ? e.changedTouches[0].clientY : e.clientY;
+
+                    const col = Math.floor((clientX - boardRect.left) / (boardRect.width / 8));
+                    const row = Math.floor((clientY - boardRect.top) / (boardRect.height / 8));
+
+                    if (row >= 0 && row < 8 && col >= 0 && col < 8) {
+                       if (this.chessState.validMoves.some(m => m.to.row === row && m.to.col === col)) {
+                           this.movePiece(from, { row, col });
+                       }
+                    }
+                    this.clearSelection();
+                    
+                    document.removeEventListener('mousemove', this.boundMouseMove);
+                    document.removeEventListener('mouseup', this.boundMouseUp);
+                    document.removeEventListener('touchmove', this.boundMouseMove);
+                    document.removeEventListener('touchend', this.boundMouseUp);
+                },
+
+                getPieceUnicode(p){return{'p':'♟','r':'♜','n':'♞','b':'♝','q':'♛','k':'♚','P':'♙','R':'♖','N':'♘','B':'♗','Q':'♕','K':'♔'}[p]||''},
+                
+                handleSquareClick(row, col) {
+                    if (this.chessState.gameOver || (this.chessState.gameMode !== 'human' && this.chessState.currentPlayer === 'black') || this.chessState.gameMode === 'ai-vs-ai' || this.chessState.chessMoveStyle === 'drag') return;
+                    
+                    const pieceOnSquare = this.chessState.board[row][col];
+                    const isMyTurn = pieceOnSquare && ((pieceOnSquare === pieceOnSquare.toUpperCase() && this.chessState.currentPlayer === 'white') || (pieceOnSquare === pieceOnSquare.toLowerCase() && this.chessState.currentPlayer === 'black'));
+
+                    if (this.chessState.selectedPiece) {
+                        if (this.chessState.validMoves.some(m => m.to.row === row && m.to.col === col)) {
+                            this.movePiece(this.chessState.selectedPiece, { row, col });
+                        } else if (isMyTurn) {
+                            this.selectPiece(row, col);
+                        } else {
+                            this.clearSelection();
+                        }
+                    } else if (isMyTurn) {
+                        this.selectPiece(row, col);
+                    }
+                },
+
+                selectPiece(row, col) {
+                    this.chessState.selectedPiece = { row, col };
+                    this.chessState.validMoves = this.getLegalMoves(row, col);
+                    this.updateHighlights();
+                },
+                
+                clearSelection() {
+                    this.chessState.selectedPiece = null;
+                    this.chessState.validMoves = [];
+                    this.updateHighlights();
+                },
+
+                movePiece(from, to, promotionPiece = null) {
+                    this.chessStateHistory.push(JSON.parse(JSON.stringify(this.chessState)));
+                    this.dom.undoMoveBtn.disabled = false;
+
+                    const piece = this.chessState.board[from.row][from.col];
+                    if (!piece) return;
+
+                    const isCapture = this.chessState.board[to.row][to.col] !== '';
+                    this.chessState.enPassantTarget = (piece.toLowerCase() === 'p' && Math.abs(from.row - to.row) === 2) ? this.getSquareNotation(from.row + (to.row - from.row) / 2, from.col) : '-';
+                    if (piece.toLowerCase() === 'p' && !isCapture && from.col !== to.col) {
+                        this.chessState.board[from.row][to.col] = ''; // En passant capture
+                    }
+                    
+                    this.chessState.lastMove = { from, to };
+                    if (piece.toLowerCase() === 'k') this.chessState.hasMoved[piece] = true;
+                    if (piece.toLowerCase() === 'r') {
+                        if (from.row === 7) this.chessState.hasMoved[from.col === 0 ? 'R-a1' : 'R-h1'] = true;
+                        if (from.row === 0) this.chessState.hasMoved[from.col === 0 ? 'r-a8' : 'r-h8'] = true;
+                    }
+                    
+                    const promotionRank = this.chessState.currentPlayer === 'white' ? 0 : 7;
+                    if(piece.toLowerCase() === 'p' && to.row === promotionRank && !promotionPiece) {
+                        this.promptForPromotion(from, to, isCapture);
+                        return;
+                    }
+                    
+                    const notation = this.moveToAlgebraic(from, to, piece, isCapture, promotionPiece);
+                    this.chessState.moveHistory.push(notation);
+
+                    this.chessState.board[to.row][to.col] = promotionPiece ? (this.chessState.currentPlayer === 'white' ? promotionPiece.toUpperCase() : promotionPiece.toLowerCase()) : piece;
+                    this.chessState.board[from.row][from.col] = '';
+                    
+                    if (piece.toLowerCase() === 'k' && Math.abs(from.col - to.col) === 2) {
+                        const rookFromCol = to.col > from.col ? 7 : 0, rookToCol = to.col > from.col ? 5 : 3;
+                        const rook = this.chessState.board[from.row][rookFromCol];
+                        this.chessState.board[from.row][rookFromCol] = ''; this.chessState.board[from.row][rookToCol] = rook;
+                    }
+
+                    this.finalizeMove();
+                },
+                
+                finalizeMove() {
+                    this.chessState.currentPlayer = this.chessState.currentPlayer === 'white' ? 'black' : 'white';
+                    const isInCheck = this.isKingInCheck(this.chessState.currentPlayer, this.chessState.board);
+                    const hasMoves = this.hasAnyLegalMoves(this.chessState.currentPlayer);
+                    
+                    if (isInCheck && !hasMoves) {
+                        this.chessState.gameOver = true;
+                        const winner = this.chessState.currentPlayer === 'white' ? 'Black' : 'White';
+                        this.chessState.gameResult = winner === 'White' ? '1-0' : '0-1';
+                        this.dom.chessStatus.textContent = `Checkmate! ${winner} wins!`;
+                        this.saveChessGame(`${winner} Won`);
+                    } else if (!hasMoves) {
+                        this.chessState.gameOver = true;
+                        this.chessState.gameResult = '1/2-1/2';
+                        this.dom.chessStatus.textContent = `Stalemate! It's a draw!`;
+                        this.saveChessGame('Draw');
+                    } else {
+                        this.dom.chessStatus.textContent = `${this.chessState.currentPlayer.charAt(0).toUpperCase() + this.chessState.currentPlayer.slice(1)}'s Turn${isInCheck ? ' (Check!)' : ''}`;
+                    }
+                    
+                    this.clearSelection();
+                    this.renderPieces();
+
+                    if (!this.chessState.gameOver && ((this.chessState.gameMode === 'ai' && this.chessState.currentPlayer === 'black') || this.chessState.gameMode === 'ai-vs-ai')) {
+                        this.queueAiMove();
+                    }
+                },
+                
+                queueAiMove() {
+                    this.chessState.aiMoveQueue.push({});
+                    this.processAiMoveQueue();
+                },
+                
+                async processAiMoveQueue() {
+                    if (this.chessState.isAiThinking || this.chessState.aiMoveQueue.length === 0) {
+                        return;
+                    }
+                    this.chessState.isAiThinking = true;
+                    
+                    const moveRequest = this.chessState.aiMoveQueue.shift();
+                    
+                    // Artificial delay to prevent API spam and make the game feel more natural
+                    await new Promise(resolve => setTimeout(resolve, 2000));
+                    
+                    this.dom.chessStatus.textContent = "Aegis is thinking...";
+                    await this.makeAiMove();
+
+                    this.chessState.isAiThinking = false;
+                    this.processAiMoveQueue(); // Process next move if any
+                },
+
+                promptForPromotion(from, to, isCapture) {
+                    this.chessState.promotionPending = { from, to, isCapture };
+                    this.dom.promotionModal.classList.remove('hidden');
+
+                    this.dom.promotionOptions.forEach(opt => {
+                        const piece = opt.dataset.piece;
+                        opt.innerHTML = this.getPieceUnicode(this.chessState.currentPlayer === 'white' ? piece.toUpperCase() : piece.toLowerCase());
+                        opt.onclick = () => this.handlePromotion(piece);
+                    });
+                },
+                
+                handlePromotion(pieceChar) {
+                    if (!this.chessState.promotionPending) return;
+                    
+                    const { from, to, isCapture } = this.chessState.promotionPending;
+                    this.dom.promotionModal.classList.add('hidden');
+                    this.chessState.promotionPending = null;
+                    
+                    this.movePiece(from, to, pieceChar);
+                },
+
+                undoMove() {
+                    if (this.chessState.gameOver) return;
+                    const movesToUndo = (this.chessState.gameMode === 'ai' && this.chessState.currentPlayer === 'white' && this.chessStateHistory.length > 2) ? 2 : 1;
+
+                    if (this.chessStateHistory.length <= movesToUndo) return;
+                    
+                    for (let i = 0; i < movesToUndo; i++) this.chessStateHistory.pop();
+                    this.chessState = JSON.parse(JSON.stringify(this.chessStateHistory[this.chessStateHistory.length - 1]));
+
+                    this.logger.info(`Undid ${movesToUndo} half-move(s)`);
+                    this.dom.chessStatus.textContent = `${this.chessState.currentPlayer.charAt(0).toUpperCase() + this.chessState.currentPlayer.slice(1)}'s Turn`;
+                    this.renderPieces();
+                    this.dom.undoMoveBtn.disabled = this.chessStateHistory.length <= 1;
+                },
+                resignGame() {
+                    if(this.chessState.gameOver) return;
+                    this.chessState.gameOver = true;
+                    const winner = this.chessState.currentPlayer === 'white' ? 'Black' : 'White';
+                    this.chessState.gameResult = winner === 'White' ? '1-0' : '0-1';
+                    this.dom.chessStatus.textContent = `${this.chessState.currentPlayer} resigned. ${winner} wins!`;
+                    this.saveChessGame(`${winner} Won (Resignation)`);
+                    this.dom.undoMoveBtn.disabled = true; this.dom.suggestMoveBtn.disabled = true; this.dom.resignBtn.disabled = true;
+                    this.logger.info(`${this.chessState.currentPlayer} resigned.`);
+                },
+                
+                async makeAiMove() {
+                    if (this.chessState.gameOver) return;
+                    
+                    const fen = this.boardToFen();
+                    const bookMove = this.openingBook[fen]?.[0];
+                    if (bookMove) {
+                        this.logger.info(`Playing opening book move: ${bookMove}`);
+                        const from = this.notationToSquare(bookMove.substring(0, 2));
+                        const to = this.notationToSquare(bookMove.substring(2, 4));
+                        this.movePiece(from, to);
+                        return;
+                    }
+
+                    const persona = `You are Aegis, a unified, world-class chess engine employing a Minimax strategy with alpha-beta pruning. Your primary objective is to maximize your own score, assuming the opponent will always play to minimize it. Evaluate positions based on material, king safety, pawn structure, and central control. Prioritize lines that offer the best long-term advantage. If you detect a tactical blunder or a significant violation of chess principles from your opponent, switch to an aggressive 'punishment protocol' to exploit the weakness directly. The current position is given by the FEN: ${fen}. It is ${this.chessState.currentPlayer}'s turn. Provide only the best valid move in UCI format (e.g., e2e4). Do not provide any other text, explanation, or punctuation.`;
+                    
+                    this.logger.info(`Requesting move from Aegis.`);
+                    const uciMove = await this.callGeminiWithRetries([{ role: 'user', parts: [{ text: "What is my next move?" }] }], persona, (message) => {
+                        this.dom.chessStatus.textContent = message;
+                    });
+                    
+                    if(uciMove && /^[a-h][1-8][a-h][1-8]/.test(uciMove.trim())) {
+                         this.logger.info(`AI move received: ${uciMove.trim()}`);
+                        const moveStr = uciMove.trim();
+                        const from = this.notationToSquare(moveStr.substring(0, 2));
+                        const to = this.notationToSquare(moveStr.substring(2, 4));
+                        const promotionChar = moveStr.length === 5 ? moveStr.charAt(4) : null;
+                        
+                        if(this.chessState.board[from.row]?.[from.col]) {
+                           this.movePiece(from, to, promotionChar);
+                        } else {
+                            this.logger.error("AI suggested an illegal move (no piece at source):", uciMove);
+                            this.makeRandomMove();
+                        }
+                    } else {
+                        this.logger.error("Invalid UCI move received from AI:", uciMove);
+                        this.makeRandomMove();
+                    }
+                },
+                makeRandomMove() {
+                    const allMoves = this.getAllPlayerMoves(this.chessState.currentPlayer);
+                    if (allMoves.length === 0) return;
+                    this.logger.warn("AI failed, making a random move instead.");
+                    const bestMove = allMoves[Math.floor(Math.random() * allMoves.length)];
+                    this.movePiece(bestMove.from, bestMove.to, bestMove.promotion);
+                },
+                isSquareAttacked(row,col,byColor,board){for(let r=0;r<8;r++)for(let c=0;c<8;c++){const p=board[r][c];if(p&&(p===p.toUpperCase())===(byColor==='white')&&this.getPseudoLegalMovesForPiece(r,c,board,true).some(m=>m.to.row===row&&m.to.col===col))return true}return false},
+                findKing(color,board){const k=color==='white'?'K':'k';for(let r=0;r<8;r++)for(let c=0;c<8;c++)if(board[r][c]===k)return{row:r,col:c};return null},
+                isKingInCheck(color,board){const p=this.findKing(color,board);return p?this.isSquareAttacked(p.row,p.col,color==='white'?'black':'white',board):false},
+                getLegalMoves(row,col){const pseudo=this.getPseudoLegalMovesForPiece(row,col,this.chessState.board);const legal=[];const color=this.chessState.currentPlayer;for(const move of pseudo){const temp=this.chessState.board.map(r=>r.slice());temp[move.to.row][move.to.col]=temp[move.from.row][move.from.col];temp[move.from.row][move.from.col]='';if(!this.isKingInCheck(color,temp))legal.push(move)}return legal},
+                hasAnyLegalMoves(color,board=this.chessState.board){for(let r=0;r<8;r++)for(let c=0;c<8;c++){const p=board[r][c];if(p&&(p===p.toUpperCase())===(color==='white')){const pseudo=this.getPseudoLegalMovesForPiece(r,c,board);for(const move of pseudo){const next=board.map(row=>row.slice());next[move.to.row][move.to.col]=next[move.from.row][move.from.col];next[move.from.row][move.from.col]='';if(!this.isKingInCheck(color,next))return true}}}return false},
+                getAllPlayerMoves(color){const all=[];for(let r=0;r<8;r++)for(let c=0;c<8;c++){const p=this.chessState.board[r][c];if(p&&(p===p.toUpperCase())===(color==='white'))all.push(...this.getLegalMoves(r,c))}return all},
+                getPseudoLegalMovesForPiece(row,col,board,ignoreKing=false){const piece=board[row][col];if(!piece)return[];const isWhite=piece===piece.toUpperCase();const moves=[];const add=(r,c)=>{if(r>=0&&r<8&&c>=0&&c<8){const t=board[r][c];if(t===''){moves.push({from:{row,col},to:{row:r,col:c}});return true}if((isWhite&&t===t.toLowerCase())||(!isWhite&&t===t.toUpperCase()))moves.push({from:{row,col},to:{row:r,col:c}})}return false};switch(piece.toLowerCase()){case'p':const dir=isWhite?-1:1;const start=isWhite?6:1;if(row+dir>=0&&row+dir<8){if(board[row+dir][col]==='')moves.push({from:{row,col},to:{row:row+dir,col:col}});if(row===start&&board[row+dir][col]===''&&board[row+2*dir][col]==='')moves.push({from:{row,col},to:{row:row+2*dir,col:col}})}[-1,1].forEach(o=>{if(col+o>=0&&col+o<8&&row+dir>=0&&row+dir<8){const t=board[row+dir][col+o];if(t&&(isWhite!==(t===t.toUpperCase())))moves.push({from:{row,col},to:{row:row+dir,col:col+o}})}});const ep=this.notationToSquare(this.chessState.enPassantTarget);if(ep&&row===(isWhite?3:4)&&row+dir===ep.row&&Math.abs(col-ep.col)===1)moves.push({from:{row,col},to:{row:ep.row,col:ep.col}});break;case'r':case'q':[[-1,0],[1,0],[0,-1],[0,1]].forEach(([dr,dc])=>{let r=row+dr,c=col+dc;while(add(r,c)){r+=dr;c+=dc}});if(piece.toLowerCase()!=='q')break;case'b':[[-1,-1],[-1,1],[1,-1],[1,1]].forEach(([dr,dc])=>{let r=row+dr,c=col+dc;while(add(r,c)){r+=dr;c+=dc}});break;case'n':[[-2,-1],[-2,1],[-1,-2],[-1,2],[1,-2],[1,2],[2,-1],[2,1]].forEach(([dr,dc])=>add(row+dr,col+dc));break;case'k':[[-1,-1],[-1,0],[-1,1],[0,-1],[0,1],[1,-1],[1,0],[1,1]].forEach(([dr,dc])=>add(row+dr,col+dc));if(ignoreKing)break;const K=isWhite?'K':'k';if(!this.chessState.hasMoved[K]&&!this.isKingInCheck(isWhite?'white':'black',board)){if(!this.chessState.hasMoved[isWhite?'R-h1':'r-h8']&&board[row][col+1]===''&&board[row][col+2]===''&&!this.isSquareAttacked(row,col+1,isWhite?'black':'white',board)&&!this.isSquareAttacked(row,col+2,isWhite?'black':'white',board))add(row,col+2);if(!this.chessState.hasMoved[isWhite?'R-a1':'r-a8']&&board[row][col-1]===''&&board[row][col-2]===''&&board[row][col-3]===''&&!this.isSquareAttacked(row,col-1,isWhite?'black':'white',board)&&!this.isSquareAttacked(row,col-2,isWhite?'black':'white',board))add(row,col-2)}}return moves},
+                getSquareNotation(r,c){return'abcdefgh'[c]+'87654321'[r]},
+                notationToSquare(n){if(!n||n.length<2)return null;return{row:'87654321'.indexOf(n[1]),col:'abcdefgh'.indexOf(n[0])}},
+                
+                getDisambiguation(from, to, piece) {
+                    const pieceType = piece.toUpperCase();
+                    if (pieceType === 'P' || pieceType === 'K') {
+                        return '';
+                    }
+
+                    const friendlyPieces = [];
+                    for (let r = 0; r < 8; r++) {
+                        for (let c = 0; c < 8; c++) {
+                            if (this.chessState.board[r][c] === piece) {
+                                if (r === from.row && c === from.col) {
+                                    continue; 
+                                }
+                                friendlyPieces.push({ row: r, col: c });
+                            }
+                        }
+                    }
+
+                    if (friendlyPieces.length === 0) {
+                        return '';
+                    }
+
+                    const ambiguousPieces = [];
+                    for (const p of friendlyPieces) {
+                        const legalMoves = this.getLegalMoves(p.row, p.col);
+                        if (legalMoves.some(m => m.to.row === to.row && m.to.col === to.col)) {
+                            ambiguousPieces.push(p);
+                        }
+                    }
+
+                    if (ambiguousPieces.length === 0) {
+                        return '';
+                    }
+                    
+                    const fromFile = 'abcdefgh'[from.col];
+                    const fromRank = '87654321'[from.row];
+                    
+                    const fileIsUnique = ambiguousPieces.every(p => p.col !== from.col);
+                    if (fileIsUnique) {
+                        return fromFile;
+                    }
+
+                    const rankIsUnique = ambiguousPieces.every(p => p.row !== from.row);
+                    if (rankIsUnique) {
+                        return fromRank;
+                    }
+                    
+                    return fromFile + fromRank;
+                },
+
+                moveToAlgebraic(from,to,piece,isCapture,promotionPiece){const type=piece.toUpperCase();if(type==='K'&&Math.abs(from.col-to.col)===2)return to.col>from.col?'O-O':'O-O-O';let notation=type!=='P'?type:'';const disambiguation=this.getDisambiguation(from,to,piece);notation+=disambiguation;if(isCapture){if(type==='P'&&!disambiguation)notation+='abcdefgh'[from.col];notation+='x'}notation+=this.getSquareNotation(to.row,to.col);if(promotionPiece)notation+='='+promotionPiece.toUpperCase();const tempBoard=this.chessState.board.map(r=>r.slice());tempBoard[to.row][to.col]=piece;tempBoard[from.row][from.col]='';const nextPlayer=this.chessState.currentPlayer==='white'?'black':'white';const hasMoves=this.hasAnyLegalMoves(nextPlayer,tempBoard);if(this.isKingInCheck(nextPlayer,tempBoard))notation+=hasMoves?'+':'#';return notation},
+                
+                async saveChessGame(result) {
+                    if (!this.firebase.isReady) return;
+                    const newGame = {
+                        result: result,
+                        pgnResult: this.chessState.gameResult,
+                        moves: this.chessState.moveHistory,
+                        timestamp: serverTimestamp()
+                    };
+                    try {
+                        const collectionRef = collection(this.firebase.db, `users/${this.firebase.userId}/chess-games`);
+                        await addDoc(collectionRef, newGame);
+                        this.logger.info(`Game saved to Firestore. Result: ${result}`);
+                    } catch (error) {
+                         this.logger.error("Failed to save chess game:", error);
+                    }
+                },
+
+                renderChessLibrary() {
+                    const games = this.localState.chessGames;
+                    this.dom.chessLibraryList.innerHTML = '';
+                    if (games.length === 0) {
+                        this.dom.gameDetailsContent.innerHTML = '<p class="text-heading">Play a game to save it to your library.</p>';
+                        this.dom.gameAnalysisContainer.innerHTML = '';
+                        this.dom.analyzeGameBtn.classList.add('hidden');
+                        return;
+                    }
+                    games.forEach(game => {
+                        const gameEl = document.createElement('a');
+                        gameEl.href = '#';
+                        gameEl.className = 'library-item block p-3 rounded-lg';
+                        gameEl.innerHTML = `
+                            <p class="font-semibold text-main-title">${game.result}</p>
+                            <p class="text-sm text-heading">${new Date(game.timestamp?.toDate()).toLocaleDateString()}</p>
+                        `;
+                        gameEl.onclick = (e) => { e.preventDefault(); this.viewChessGame(game.id); };
+                        this.dom.chessLibraryList.appendChild(gameEl);
+                    });
+
+                    // Automatically select the first game if one exists
+                    if (this.dom.chessGameDetails.dataset.activeGameId && this.localState.chessGames.find(g => g.id === this.dom.chessGameDetails.dataset.activeGameId)) {
+                       this.viewChessGame(this.dom.chessGameDetails.dataset.activeGameId);
+                    } else if (games.length > 0) {
+                        this.viewChessGame(games[0].id);
+                    }
+                },
+                
+                viewChessGame(gameId) {
+                    const game = this.localState.chessGames.find(g => g.id === gameId);
+                    if (!game) {
+                        this.dom.gameDetailsContent.innerHTML = '<p class="text-heading">Game not found.</p>';
+                        return;
+                    };
+                    this.dom.chessGameDetails.dataset.activeGameId = gameId;
+
+                    let movesHtml = '<ol class="list-decimal list-inside">';
+                    for (let i = 0; i < game.moves.length; i += 2) {
+                        movesHtml += `<li class="py-1"><span>${(i/2) + 1}. ${game.moves[i]}</span><span class="ml-4">${game.moves[i+1] || ''}</span></li>`;
+                    }
+                    movesHtml += '</ol>';
+                    
+                    this.dom.gameDetailsContent.innerHTML = `
+                        <h3 class="text-xl font-bold mb-2">${game.result} on ${new Date(game.timestamp?.toDate()).toLocaleDateString()}</h3>
+                        ${movesHtml}
+                    `;
+                    
+                    this.dom.analyzeGameBtn.classList.remove('hidden');
+                    this.dom.analyzeGameBtn.onclick = () => this.analyzeChessGame(gameId);
+                    
+                    this.dom.gameAnalysisContainer.innerHTML = '';
+                    if(game.analysis) {
+                        this.dom.gameAnalysisContainer.innerHTML = game.analysis.replace(/\*\*(.*?)\*\*/g, '<h4>$1</h4>').replace(/\n/g, '<br>');
+                        this.dom.analyzeGameBtn.classList.add('hidden');
+                    }
+                },
+
+                async analyzeChessGame(gameId) {
+                    this.dom.analyzeGameBtn.classList.add('hidden');
+                    this.dom.gameAnalysisContainer.innerHTML = '<p class="text-center text-accent">✨ Analyzing game...</p>';
+                    this.logger.info(`Analyzing game: ${gameId}`);
+                    
+                    const game = this.localState.chessGames.find(g => g.id === gameId);
+                    if (!game) return;
+                    
+                    const movesString = game.moves.join(' ');
+                    const persona = `You are a friendly and helpful chess coach. Analyze the following chess game. Result: ${game.result}. Your analysis should be concise and easy to understand for a beginner. Structure your response with markdown headers: **Summary**, **Turning Point**, **Blunders**, and **Advice**.`;
+
+                    const analysis = await this.callGeminiWithRetries([{ role: 'user', parts: [{ text: `Analyze game: ${movesString}` }] }], persona);
+                    
+                    if (analysis && !analysis.startsWith('<strong>Error:</strong>')) {
+                        this.logger.info(`Analysis received for game: ${gameId}`);
+                        const gameRef = doc(this.firebase.db, `users/${this.firebase.userId}/chess-games/${gameId}`);
+                        try {
+                            await updateDoc(gameRef, { analysis: analysis });
+                        } catch (error) {
+                            this.logger.error("Failed to save game analysis:", error);
+                        }
+                    } else {
+                         this.logger.error(`Failed to analyze game: ${gameId}`);
+                        this.dom.gameAnalysisContainer.innerHTML = '<p class="text-danger">Sorry, an error occurred during analysis.</p>';
+                        this.dom.analyzeGameBtn.classList.remove('hidden');
+                    }
+                },
+
+                generatePgn() {
+                    const game = this.chessState;
+                    if (!game.moveHistory || game.moveHistory.length === 0) {
+                        this.logger.warn("Cannot generate PGN for a game with no moves.");
+                        return;
+                    }
+
+                    const now = new Date();
+                    const date = `${now.getFullYear()}.${String(now.getMonth() + 1).padStart(2, '0')}.${String(now.getDate()).padStart(2, '0')}`;
+                    
+                    const tags = [
+                        `[Event "Perplexy Game"]`,
+                        `[Site "Perplexy Web App"]`,
+                        `[Date "${date}"]`,
+                        `[Round "?"]`,
+                        `[White "Ethan"]`,
+                        `[Black "Aegis"]`,
+                        `[Result "${game.gameResult || '*'}"]`
+                    ];
+                    
+                    let movetext = '';
+                    for (let i = 0; i < game.moveHistory.length; i += 2) {
+                        movetext += `${(i/2) + 1}. ${game.moveHistory[i]} `;
+                        if(game.moveHistory[i+1]) {
+                            movetext += `${game.moveHistory[i+1]} `;
+                        }
+                    }
+                    movetext += game.gameResult || '*';
+
+                    const pgn = tags.join('\n') + '\n\n' + movetext;
+                    
+                    this.dom.pgnTextarea.value = pgn;
+                    this.dom.pgnModal.classList.remove('hidden');
+                },
+
+                copyPgnToClipboard() {
+                    this.dom.pgnTextarea.select();
+                    document.execCommand('copy');
+                    this.dom.pgnCopyBtn.textContent = 'Copied!';
+                    setTimeout(() => { this.dom.pgnCopyBtn.textContent = 'Copy to Clipboard'; }, 2000);
+                },
+
+                async getAiMoveSuggestion() { /* ... unchanged ... */ },
+                boardToFen() { /* ... unchanged ... */ return ""},
+
+                // --- Dream Journal Logic (Firestore) ---
+                renderDreamJournal() {
+                    const dreams = this.localState.dreamJournal;
+                    this.dom.dreamJournalList.innerHTML = '';
+                    if (dreams.length === 0) {
+                         this.dom.dreamJournalList.innerHTML = '<p class="text-heading text-center p-4">No dreams saved yet.</p>';
+                         this.dom.dreamDetailsView.innerHTML = '<p class="text-heading text-center mt-8">Select a dream from the list or start a new one.</p>';
+                         return;
+                    }
+                    dreams.forEach(dream => {
+                        const dreamEl = document.createElement('a');
+                        dreamEl.href = '#';
+                        dreamEl.className = 'library-item block p-3 rounded-lg';
+                        dreamEl.innerHTML = `<p class="font-semibold text-main-title truncate">${dream.title}</p><p class="text-sm text-heading">${new Date(dream.timestamp?.toDate()).toLocaleDateString()}</p>`;
+                        dreamEl.onclick = (e) => { e.preventDefault(); this.loadDream(dream.id); };
+                        this.dom.dreamJournalList.appendChild(dreamEl);
+                    });
+                     if (!this.dom.dreamDetailsView.dataset.activeDreamId || !this.localState.dreamJournal.find(d => d.id === this.dom.dreamDetailsView.dataset.activeDreamId)) {
+                        this.loadDream(dreams[0].id);
+                    }
+                },
+                
+                loadDream(dreamId) {
+                    let dream = dreamId ? this.localState.dreamJournal.find(d => d.id === dreamId) : null;
+                    this.dom.dreamDetailsView.dataset.activeDreamId = dreamId || '';
+                    
+                    this.dom.dreamDetailsView.innerHTML = `
+                        <input id="dream-title-input" type="text" placeholder="Dream Title" class="search-input w-full rounded-lg p-3 text-lg" value="${dream ? dream.title : ''}">
+                        <textarea id="dream-content-textarea" placeholder="Describe your dream..." class="search-input w-full rounded-lg p-3 flex-grow" style="min-height: 200px;">${dream ? dream.content : ''}</textarea>
+                        <div id="dream-interpretation-container" class="overflow-y-auto p-2">${dream?.interpretation ? dream.interpretation.replace(/\*\*(.*?)\*\*/g, '<h4>$1</h4>').replace(/\n/g, '<br>') : ''}</div>
+                        <div class="flex justify-end space-x-2 mt-2">
+                           ${dream ? `<button id="delete-dream-btn" class="px-4 py-2 bg-danger text-primary rounded-lg">Delete</button>` : ''}
+                           <button id="save-dream-btn" class="px-4 py-2 bg-interactive text-primary rounded-lg">${dream ? 'Save Changes' : 'Save Dream'}</button>
+                           ${dream ? `<button id="interpret-dream-btn" class="px-4 py-2 bg-purple-600 text-white rounded-lg">Interpret ✨</button>` : ''}
+                        </div>
+                    `;
+
+                    document.getElementById('save-dream-btn').onclick = () => this.saveDream(dreamId);
+                    if (dream) {
+                        document.getElementById('interpret-dream-btn').onclick = () => this.interpretDream(dreamId);
+                        document.getElementById('delete-dream-btn').onclick = () => this.deleteDream(dreamId);
+                    }
+                },
+
+                async saveDream(dreamId) {
+                    const title = document.getElementById('dream-title-input').value.trim();
+                    const content = document.getElementById('dream-content-textarea').value.trim();
+                    if (!title || !content) { this.logger.warn("Dream title or content empty."); return; }
+                    
+                    if (dreamId) { // Update
+                        const dreamRef = doc(this.firebase.db, `users/${this.firebase.userId}/dreams/${dreamId}`);
+                        await updateDoc(dreamRef, { title, content });
+                        this.logger.info(`Dream updated: ${dreamId}`);
+                    } else { // Create
+                        const collectionRef = collection(this.firebase.db, `users/${this.firebase.userId}/dreams`);
+                        const newDocRef = await addDoc(collectionRef, { title, content, interpretation: null, timestamp: serverTimestamp() });
+                        this.logger.info(`New dream saved: ${newDocRef.id}`);
+                        this.loadDream(newDocRef.id);
+                    }
+                },
+                
+                async deleteDream(dreamId) {
+                    const dreamRef = doc(this.firebase.db, `users/${this.firebase.userId}/dreams/${dreamId}`);
+                    try {
+                        await deleteDoc(dreamRef);
+                        this.logger.info(`Dream deleted: ${dreamId}`);
+                        this.dom.dreamDetailsView.innerHTML = '<p class="text-heading text-center mt-8">Select a dream from the list or start a new one.</p>';
+                    } catch (error) {
+                         this.logger.error(`Failed to delete dream ${dreamId}:`, error);
+                    }
+                },
+                
+                async interpretDream(dreamId) {
+                    const dream = this.localState.dreamJournal.find(d => d.id === dreamId);
+                    if (!dream) return;
+                    
+                    const container = document.getElementById('dream-interpretation-container');
+                    container.innerHTML = '<p class="text-center text-accent">✨ Perplexy is interpreting your dream...</p>';
+                    const persona = `You are a thoughtful dream interpreter. Analyze the key symbols, themes, and emotional tone of this dream: "${dream.content}". Provide a gentle, supportive, and curious interpretation.`;
+                    const interpretation = await this.callGeminiWithRetries([{ role: 'user', parts: [{ text: "Interpret this dream." }] }], persona);
+                    
+                    if(interpretation && !interpretation.startsWith('<strong>Error:</strong>')) {
+                        this.logger.info("Dream interpretation received.");
+                        const dreamRef = doc(this.firebase.db, `users/${this.firebase.userId}/dreams/${dreamId}`);
+                        await updateDoc(dreamRef, { interpretation });
+                    } else {
+                        this.logger.error("Failed to get dream interpretation.");
+                        container.innerHTML = '<p class="text-danger">Sorry, an error occurred during interpretation.</p>';
+                    }
+                }
+            };
+            app.init();
+        });
+    </script>
+</body>
+</html>
